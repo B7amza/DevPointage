@@ -43,6 +43,7 @@
             this.ribbonPageGroup3 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonStatusBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.pn_continer = new System.Windows.Forms.Panel();
+            this.bt_pointage = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).BeginInit();
             this.SuspendLayout();
             // 
@@ -55,9 +56,10 @@
             this.bt_affectation,
             this.barButtonItem1,
             this.bt_telecharger,
-            this.bt_horaireT});
+            this.bt_horaireT,
+            this.bt_pointage});
             this.ribbon.Location = new System.Drawing.Point(0, 0);
-            this.ribbon.MaxItemId = 6;
+            this.ribbon.MaxItemId = 7;
             this.ribbon.Name = "ribbon";
             this.ribbon.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.ribbonPage1,
@@ -117,6 +119,7 @@
             // 
             this.ribbonPageGroup1.ItemLinks.Add(this.bt_employe);
             this.ribbonPageGroup1.ItemLinks.Add(this.bt_horaireT);
+            this.ribbonPageGroup1.ItemLinks.Add(this.bt_pointage);
             this.ribbonPageGroup1.Name = "ribbonPageGroup1";
             this.ribbonPageGroup1.Text = "ribbonPageGroup1";
             // 
@@ -162,6 +165,14 @@
             this.pn_continer.Size = new System.Drawing.Size(948, 425);
             this.pn_continer.TabIndex = 2;
             // 
+            // bt_pointage
+            // 
+            this.bt_pointage.Caption = "Pointage";
+            this.bt_pointage.Id = 6;
+            this.bt_pointage.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem2.ImageOptions.LargeImage")));
+            this.bt_pointage.Name = "bt_pointage";
+            this.bt_pointage.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.bt_pointage_ItemClick);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
@@ -200,5 +211,6 @@
         private DevExpress.XtraBars.Ribbon.RibbonPage ribbonPage3;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup3;
         private DevExpress.XtraBars.BarButtonItem bt_horaireT;
+        private DevExpress.XtraBars.BarButtonItem bt_pointage;
     }
 }

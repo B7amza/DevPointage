@@ -13,6 +13,7 @@ namespace DevPointage
 {
     public partial class Form2 : DevExpress.XtraBars.Ribbon.RibbonForm
     {
+        static public string annee_en_cours;
         public Form2()
         {
             InitializeComponent();
@@ -23,7 +24,8 @@ namespace DevPointage
         static public Form11 fn_affectation;
         static public Form12 fn_fonction;
         static public Form4 fn_telechargement;
-        static public Form13 fn_horaire_travail;    
+        static public Form13 fn_horaire_travail;
+        static public Form14 fn_pointage_mensuelle;
 
 
 
@@ -40,7 +42,7 @@ namespace DevPointage
 
         private void Form2_Load(object sender, EventArgs e)
         {
-
+            annee_en_cours = DateTime.Now.Year.ToString();
         }
         private void LoadUC(DevExpress.XtraEditors.XtraUserControl Page_UControle)
         {
@@ -91,6 +93,13 @@ namespace DevPointage
             fn_horaire_travail.ShowDialog();
             fn_horaire_travail.Dispose();
 
+        }
+
+        private void bt_pointage_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            fn_pointage_mensuelle = new Form14();
+            fn_pointage_mensuelle.ShowDialog();
+            fn_pointage_mensuelle.Dispose();
         }
     }
 }
