@@ -17,9 +17,10 @@ namespace DevPointage
         public Form10()
         {
             InitializeComponent();
+            ConnectSqlServer.Initialized();
         }
         static public int insertion_modification; // 0 for insertion, 1 for modification
-        static public string var_affectation, var_fonction;
+        static public string var_affectation, var_fonction,var_horaireT;
         private void bt_fermer_Click(object sender, EventArgs e)
         {
             Close();
@@ -31,11 +32,13 @@ namespace DevPointage
             // Load existing affectations and fonctions from the database into comboBoxEdit controls
             load_affectation_data();
             load_fonction_data();
+            load_horaire_travail_data();
             if (insertion_modification == 1) 
             {
                 cb_affectation.SelectedValue = var_affectation; // Set the selected value for affectation
                 cb_fonction.SelectedValue = var_fonction; // Set the selected value for fonction
-
+                cb_horaire_travail.SelectedIndex = -1 ; // Set the selected value for horaire travail
+                groupControl3.Visible = false;
             }
 
 
@@ -56,7 +59,7 @@ namespace DevPointage
                         {
                             string codeAffectation = reader["c_affect"].ToString();
                             string libAffectation = reader["lib_affect"].ToString();
-                            cb_affectation1.Properties.Items.Add($"{codeAffectation} - {libAffectation}");
+                            //cb_affectation1.Properties.Items.Add($"{codeAffectation} - {libAffectation}");
                         }
                     }
                 }
@@ -102,7 +105,7 @@ namespace DevPointage
                         {
                             string codeFonction = reader["c_fonct"].ToString();
                             string libFonction = reader["lib_fonction"].ToString();
-                            cb_fonction1.Properties.Items.Add($"{codeFonction} - {libFonction}");
+                            //cb_fonction1.Properties.Items.Add($"{codeFonction} - {libFonction}");
                         }
                     }
                 }
@@ -127,6 +130,22 @@ namespace DevPointage
             }
         }
 
+        private void load_horaire_travail_data()
+        {
+            // 1. تعريف الاستعلام
+            string query = "SELECT code, designation FROM Horaire_Travail";
+
+            // 2. استخدام ExecuteSelect من الكلاس الخاص بك (هي تتكفل بالفتح والإغلاق)
+            DataTable dt = ConnectSqlServer.ExecuteSelect(query);
+
+            // 3. التحقق من وجود بيانات وتعبئة الـ ComboBox
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                cb_horaire_travail.DataSource = dt;
+                cb_horaire_travail.DisplayMember = "designation"; // النص الظاهر
+                cb_horaire_travail.ValueMember = "code";     // القيمة البرمجية
+            }
+        }
         private void bt_ajouter_Click(object sender, EventArgs e)
         {
             insertion_modification = 0; // Set to 0 for insertion
@@ -174,17 +193,19 @@ namespace DevPointage
                 cb_sexe.Enabled = true;
                 cb_sexe.SelectedIndex = -1; // Reset selection
                 cb_type.Enabled = true;
-                cb_type.SelectedIndex = -1; // Reset selection
+                cb_type.SelectedIndex = 0; // Reset selection
                 cb_pointage.Enabled = true;
-                cb_pointage.SelectedIndex = -1; // Reset selection
+                cb_pointage.SelectedIndex = 0; // Reset selection
 
 
                 cb_fonction.Enabled = true;
                 cb_fonction.SelectedIndex = -1; // Reset selection
                 cb_affectation.Enabled = true;
                 cb_affectation.SelectedIndex = -1; // Reset selection
-                cb_affectation1.Enabled = true;
-                cb_fonction1.Enabled = true;
+                //cb_affectation1.Enabled = true;
+                //cb_fonction1.Enabled = true;
+                cb_horaire_travail.Enabled = true;
+                cb_horaire_travail.SelectedIndex = -1; // Reset selection
 
                 bt_ajouter.Enabled = false;
                 bt_modifier.Enabled = false;
@@ -213,8 +234,11 @@ namespace DevPointage
                 
                 cb_affectation.Enabled = true;
                 
-                cb_affectation1.Enabled = true;
-                cb_fonction1.Enabled = true;
+                //cb_affectation1.Enabled = true;
+                //cb_fonction1.Enabled = true;
+                cb_horaire_travail.Enabled = true;
+                
+
 
                 bt_ajouter.Enabled = false;
                 bt_modifier.Enabled = false;
@@ -243,8 +267,8 @@ namespace DevPointage
                 cb_fonction.SelectedIndex = -1; // Reset selection
                 cb_affectation.Enabled = false;
                 cb_affectation.SelectedIndex = -1; // Reset selection
-                cb_affectation1.Enabled = false;
-                cb_fonction1.Enabled = false;
+                //cb_affectation1.Enabled = false;
+                //cb_fonction1.Enabled = false;
 
                 bt_ajouter.Enabled = true;
                 bt_modifier.Enabled = false;
@@ -307,6 +331,32 @@ namespace DevPointage
 
                         cmd.ExecuteNonQuery();
                     }
+                    // إضافة سجل في جدول PERSONNEL_EMPLOI_TEMPS
+                    // 1. تعريف الاستعلام
+                    string horairequery = @"INSERT INTO PERSONNEL_EMPLOI_TEMPS 
+                        (matri, code, date_du, date_au) 
+                        VALUES (@matri, @code_horaire, @date_du, @date_au)";
+
+                    // 2. حساب تاريخ آخر يوم في السنة الحالية
+                    DateTime lastDayOfYear = new DateTime(DateTime.Now.Year, 12, 31);
+
+                    // 3. تجهيز البارامترات في مصفوفة (Array)
+                    SqlParameter[] parameters = new SqlParameter[]
+                    {
+                        new SqlParameter("@matri", txt_matricule.Text.Trim()),
+                        new SqlParameter("@code_horaire", cb_horaire_travail.SelectedValue ?? DBNull.Value),
+                        new SqlParameter("@date_du", DateTime.Now),
+                        new SqlParameter("@date_au", lastDayOfYear) // هنا نضع تاريخ 31/12
+                    };
+
+                    // 4. تنفيذ الاستعلام باستخدام الكلاس الخاص بك
+                    int rowsAffected = ConnectSqlServer.ExecuteNonQuery(horairequery, parameters);
+
+                    if (rowsAffected > 0)
+                    {
+                        // تم الإدخال بنجاح
+                    }
+
                 }
                 else if (insertion_modification == 1) // Modification
                 {

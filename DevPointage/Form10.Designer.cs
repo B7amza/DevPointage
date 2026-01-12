@@ -52,19 +52,24 @@
             this.cb_type = new System.Windows.Forms.ComboBox();
             this.cb_affectation = new System.Windows.Forms.ComboBox();
             this.cb_fonction = new System.Windows.Forms.ComboBox();
-            this.cb_affectation1 = new DevExpress.XtraEditors.ComboBoxEdit();
-            this.cb_fonction1 = new DevExpress.XtraEditors.ComboBoxEdit();
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl8 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl9 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl10 = new DevExpress.XtraEditors.LabelControl();
+            this.groupControl3 = new DevExpress.XtraEditors.GroupControl();
+            this.labelControl11 = new DevExpress.XtraEditors.LabelControl();
+            this.cb_horaire_travail = new System.Windows.Forms.ComboBox();
+            this.dt_du = new System.Windows.Forms.DateTimePicker();
+            this.dt_au = new System.Windows.Forms.DateTimePicker();
+            this.labelControl12 = new DevExpress.XtraEditors.LabelControl();
+            this.labelControl13 = new DevExpress.XtraEditors.LabelControl();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).BeginInit();
             this.groupControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl2)).BeginInit();
             this.groupControl2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.cb_affectation1.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cb_fonction1.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.groupControl3)).BeginInit();
+            this.groupControl3.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -75,9 +80,9 @@
             this.panel1.Controls.Add(this.bt_enregistrer);
             this.panel1.Controls.Add(this.bt_ajouter);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 576);
+            this.panel1.Location = new System.Drawing.Point(0, 594);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(933, 116);
+            this.panel1.Size = new System.Drawing.Size(941, 116);
             this.panel1.TabIndex = 2;
             // 
             // bt_modifier
@@ -88,7 +93,7 @@
             this.bt_modifier.Enabled = false;
             this.bt_modifier.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("bt_modifier.ImageOptions.Image")));
             this.bt_modifier.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.TopCenter;
-            this.bt_modifier.Location = new System.Drawing.Point(264, 21);
+            this.bt_modifier.Location = new System.Drawing.Point(268, 21);
             this.bt_modifier.Name = "bt_modifier";
             this.bt_modifier.Size = new System.Drawing.Size(148, 83);
             this.bt_modifier.TabIndex = 13;
@@ -102,7 +107,7 @@
             this.bt_fermer.Appearance.Options.UseFont = true;
             this.bt_fermer.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("bt_fermer.ImageOptions.Image")));
             this.bt_fermer.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.TopCenter;
-            this.bt_fermer.Location = new System.Drawing.Point(676, 21);
+            this.bt_fermer.Location = new System.Drawing.Point(680, 21);
             this.bt_fermer.Name = "bt_fermer";
             this.bt_fermer.Size = new System.Drawing.Size(148, 83);
             this.bt_fermer.TabIndex = 12;
@@ -117,7 +122,7 @@
             this.bt_enregistrer.Enabled = false;
             this.bt_enregistrer.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("bt_enregistrer.ImageOptions.Image")));
             this.bt_enregistrer.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.TopCenter;
-            this.bt_enregistrer.Location = new System.Drawing.Point(429, 21);
+            this.bt_enregistrer.Location = new System.Drawing.Point(433, 21);
             this.bt_enregistrer.Name = "bt_enregistrer";
             this.bt_enregistrer.Size = new System.Drawing.Size(148, 83);
             this.bt_enregistrer.TabIndex = 11;
@@ -132,7 +137,7 @@
             this.bt_ajouter.Enabled = false;
             this.bt_ajouter.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("bt_ajouter.ImageOptions.Image")));
             this.bt_ajouter.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.TopCenter;
-            this.bt_ajouter.Location = new System.Drawing.Point(94, 21);
+            this.bt_ajouter.Location = new System.Drawing.Point(98, 21);
             this.bt_ajouter.Name = "bt_ajouter";
             this.bt_ajouter.Size = new System.Drawing.Size(148, 83);
             this.bt_ajouter.TabIndex = 10;
@@ -155,7 +160,7 @@
             this.groupControl1.Controls.Add(this.labelControl1);
             this.groupControl1.Location = new System.Drawing.Point(12, 12);
             this.groupControl1.Name = "groupControl1";
-            this.groupControl1.Size = new System.Drawing.Size(909, 270);
+            this.groupControl1.Size = new System.Drawing.Size(916, 251);
             this.groupControl1.TabIndex = 3;
             this.groupControl1.Text = "Personnel Information ...";
             // 
@@ -283,15 +288,13 @@
             this.groupControl2.Controls.Add(this.cb_type);
             this.groupControl2.Controls.Add(this.cb_affectation);
             this.groupControl2.Controls.Add(this.cb_fonction);
-            this.groupControl2.Controls.Add(this.cb_affectation1);
-            this.groupControl2.Controls.Add(this.cb_fonction1);
             this.groupControl2.Controls.Add(this.labelControl2);
             this.groupControl2.Controls.Add(this.labelControl8);
             this.groupControl2.Controls.Add(this.labelControl9);
             this.groupControl2.Controls.Add(this.labelControl10);
-            this.groupControl2.Location = new System.Drawing.Point(12, 300);
+            this.groupControl2.Location = new System.Drawing.Point(12, 272);
             this.groupControl2.Name = "groupControl2";
-            this.groupControl2.Size = new System.Drawing.Size(909, 270);
+            this.groupControl2.Size = new System.Drawing.Size(918, 200);
             this.groupControl2.TabIndex = 4;
             this.groupControl2.Text = "Details ...";
             // 
@@ -316,7 +319,7 @@
             this.cb_type.Items.AddRange(new object[] {
             "Active",
             "Bloque"});
-            this.cb_type.Location = new System.Drawing.Point(534, 104);
+            this.cb_type.Location = new System.Drawing.Point(534, 57);
             this.cb_type.Name = "cb_type";
             this.cb_type.Size = new System.Drawing.Size(300, 24);
             this.cb_type.TabIndex = 20;
@@ -341,33 +344,11 @@
             this.cb_fonction.Size = new System.Drawing.Size(300, 24);
             this.cb_fonction.TabIndex = 18;
             // 
-            // cb_affectation1
-            // 
-            this.cb_affectation1.Enabled = false;
-            this.cb_affectation1.Location = new System.Drawing.Point(534, 155);
-            this.cb_affectation1.Name = "cb_affectation1";
-            this.cb_affectation1.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.cb_affectation1.Size = new System.Drawing.Size(300, 22);
-            this.cb_affectation1.TabIndex = 15;
-            this.cb_affectation1.Visible = false;
-            // 
-            // cb_fonction1
-            // 
-            this.cb_fonction1.Enabled = false;
-            this.cb_fonction1.Location = new System.Drawing.Point(534, 57);
-            this.cb_fonction1.Name = "cb_fonction1";
-            this.cb_fonction1.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.cb_fonction1.Size = new System.Drawing.Size(300, 22);
-            this.cb_fonction1.TabIndex = 14;
-            this.cb_fonction1.Visible = false;
-            // 
             // labelControl2
             // 
             this.labelControl2.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelControl2.Appearance.Options.UseFont = true;
-            this.labelControl2.Location = new System.Drawing.Point(453, 100);
+            this.labelControl2.Location = new System.Drawing.Point(453, 53);
             this.labelControl2.Name = "labelControl2";
             this.labelControl2.Size = new System.Drawing.Size(57, 24);
             this.labelControl2.TabIndex = 10;
@@ -403,11 +384,89 @@
             this.labelControl10.TabIndex = 0;
             this.labelControl10.Text = "Affectation :";
             // 
+            // groupControl3
+            // 
+            this.groupControl3.Controls.Add(this.labelControl13);
+            this.groupControl3.Controls.Add(this.labelControl12);
+            this.groupControl3.Controls.Add(this.dt_au);
+            this.groupControl3.Controls.Add(this.dt_du);
+            this.groupControl3.Controls.Add(this.cb_horaire_travail);
+            this.groupControl3.Controls.Add(this.labelControl11);
+            this.groupControl3.Location = new System.Drawing.Point(12, 479);
+            this.groupControl3.Name = "groupControl3";
+            this.groupControl3.Size = new System.Drawing.Size(916, 100);
+            this.groupControl3.TabIndex = 5;
+            this.groupControl3.Text = "Plage Horaire...";
+            // 
+            // labelControl11
+            // 
+            this.labelControl11.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelControl11.Appearance.Options.UseFont = true;
+            this.labelControl11.Location = new System.Drawing.Point(5, 62);
+            this.labelControl11.Name = "labelControl11";
+            this.labelControl11.Size = new System.Drawing.Size(175, 24);
+            this.labelControl11.TabIndex = 4;
+            this.labelControl11.Text = "Periode de Travail :";
+            // 
+            // cb_horaire_travail
+            // 
+            this.cb_horaire_travail.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_horaire_travail.Enabled = false;
+            this.cb_horaire_travail.FormattingEnabled = true;
+            this.cb_horaire_travail.Items.AddRange(new object[] {
+            "Oui",
+            "Non"});
+            this.cb_horaire_travail.Location = new System.Drawing.Point(186, 61);
+            this.cb_horaire_travail.Name = "cb_horaire_travail";
+            this.cb_horaire_travail.Size = new System.Drawing.Size(260, 24);
+            this.cb_horaire_travail.TabIndex = 22;
+            // 
+            // dt_du
+            // 
+            this.dt_du.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dt_du.Location = new System.Drawing.Point(515, 62);
+            this.dt_du.Name = "dt_du";
+            this.dt_du.Size = new System.Drawing.Size(119, 23);
+            this.dt_du.TabIndex = 23;
+            this.dt_du.Visible = false;
+            // 
+            // dt_au
+            // 
+            this.dt_au.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dt_au.Location = new System.Drawing.Point(710, 62);
+            this.dt_au.Name = "dt_au";
+            this.dt_au.Size = new System.Drawing.Size(119, 23);
+            this.dt_au.TabIndex = 24;
+            this.dt_au.Visible = false;
+            // 
+            // labelControl12
+            // 
+            this.labelControl12.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelControl12.Appearance.Options.UseFont = true;
+            this.labelControl12.Location = new System.Drawing.Point(471, 61);
+            this.labelControl12.Name = "labelControl12";
+            this.labelControl12.Size = new System.Drawing.Size(38, 24);
+            this.labelControl12.TabIndex = 22;
+            this.labelControl12.Text = "Du :";
+            this.labelControl12.Visible = false;
+            // 
+            // labelControl13
+            // 
+            this.labelControl13.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelControl13.Appearance.Options.UseFont = true;
+            this.labelControl13.Location = new System.Drawing.Point(668, 61);
+            this.labelControl13.Name = "labelControl13";
+            this.labelControl13.Size = new System.Drawing.Size(36, 24);
+            this.labelControl13.TabIndex = 25;
+            this.labelControl13.Text = "Au :";
+            this.labelControl13.Visible = false;
+            // 
             // Form10
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(933, 692);
+            this.ClientSize = new System.Drawing.Size(941, 710);
+            this.Controls.Add(this.groupControl3);
             this.Controls.Add(this.groupControl2);
             this.Controls.Add(this.groupControl1);
             this.Controls.Add(this.panel1);
@@ -422,8 +481,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.groupControl2)).EndInit();
             this.groupControl2.ResumeLayout(false);
             this.groupControl2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.cb_affectation1.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cb_fonction1.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.groupControl3)).EndInit();
+            this.groupControl3.ResumeLayout(false);
+            this.groupControl3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -452,12 +512,17 @@
         private DevExpress.XtraEditors.LabelControl labelControl9;
         private DevExpress.XtraEditors.LabelControl labelControl10;
         private DevExpress.XtraEditors.LabelControl labelControl7;
-        public DevExpress.XtraEditors.ComboBoxEdit cb_affectation1;
-        public DevExpress.XtraEditors.ComboBoxEdit cb_fonction1;
         public System.Windows.Forms.ComboBox cb_fonction;
         public System.Windows.Forms.ComboBox cb_affectation;
         public System.Windows.Forms.ComboBox cb_sexe;
         public System.Windows.Forms.ComboBox cb_pointage;
         public System.Windows.Forms.ComboBox cb_type;
+        private DevExpress.XtraEditors.GroupControl groupControl3;
+        private DevExpress.XtraEditors.LabelControl labelControl13;
+        private DevExpress.XtraEditors.LabelControl labelControl12;
+        private System.Windows.Forms.DateTimePicker dt_au;
+        private System.Windows.Forms.DateTimePicker dt_du;
+        public System.Windows.Forms.ComboBox cb_horaire_travail;
+        private DevExpress.XtraEditors.LabelControl labelControl11;
     }
 }

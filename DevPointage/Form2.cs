@@ -22,6 +22,8 @@ namespace DevPointage
         static public Form10 fn_personnel;
         static public Form11 fn_affectation;
         static public Form12 fn_fonction;
+        static public Form4 fn_telechargement;
+        static public Form13 fn_horaire_travail;    
 
 
 
@@ -74,6 +76,21 @@ namespace DevPointage
         private void barButtonItem1_ItemClick(object sender, ItemClickEventArgs e)
         {
             LoadUC(uc_fonction1);
+        }
+
+        private void bt_telecharger_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            fn_telechargement = new Form4();
+            fn_telechargement.ShowDialog();
+            fn_telechargement.Dispose();
+        }
+
+        private void bt_horaireT_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            fn_horaire_travail = new Form13();
+            fn_horaire_travail.ShowDialog();
+            fn_horaire_travail.Dispose();
+
         }
     }
 }

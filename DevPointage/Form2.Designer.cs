@@ -33,10 +33,14 @@
             this.bt_employe = new DevExpress.XtraBars.BarButtonItem();
             this.bt_affectation = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
+            this.bt_telecharger = new DevExpress.XtraBars.BarButtonItem();
+            this.bt_horaireT = new DevExpress.XtraBars.BarButtonItem();
             this.ribbonPage1 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPage2 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup2 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            this.ribbonPage3 = new DevExpress.XtraBars.Ribbon.RibbonPage();
+            this.ribbonPageGroup3 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonStatusBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.pn_continer = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).BeginInit();
@@ -49,13 +53,16 @@
             this.ribbon.ExpandCollapseItem,
             this.bt_employe,
             this.bt_affectation,
-            this.barButtonItem1});
+            this.barButtonItem1,
+            this.bt_telecharger,
+            this.bt_horaireT});
             this.ribbon.Location = new System.Drawing.Point(0, 0);
-            this.ribbon.MaxItemId = 4;
+            this.ribbon.MaxItemId = 6;
             this.ribbon.Name = "ribbon";
             this.ribbon.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.ribbonPage1,
-            this.ribbonPage2});
+            this.ribbonPage2,
+            this.ribbonPage3});
             this.ribbon.Size = new System.Drawing.Size(948, 193);
             this.ribbon.StatusBar = this.ribbonStatusBar;
             // 
@@ -83,6 +90,22 @@
             this.barButtonItem1.Name = "barButtonItem1";
             this.barButtonItem1.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem1_ItemClick);
             // 
+            // bt_telecharger
+            // 
+            this.bt_telecharger.Caption = "Telecharger";
+            this.bt_telecharger.Id = 4;
+            this.bt_telecharger.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("bt_telecharger.ImageOptions.LargeImage")));
+            this.bt_telecharger.Name = "bt_telecharger";
+            this.bt_telecharger.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.bt_telecharger_ItemClick);
+            // 
+            // bt_horaireT
+            // 
+            this.bt_horaireT.Caption = "Horaire Travail";
+            this.bt_horaireT.Id = 5;
+            this.bt_horaireT.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("bt_horaireT.ImageOptions.LargeImage")));
+            this.bt_horaireT.Name = "bt_horaireT";
+            this.bt_horaireT.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.bt_horaireT_ItemClick);
+            // 
             // ribbonPage1
             // 
             this.ribbonPage1.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
@@ -93,6 +116,7 @@
             // ribbonPageGroup1
             // 
             this.ribbonPageGroup1.ItemLinks.Add(this.bt_employe);
+            this.ribbonPageGroup1.ItemLinks.Add(this.bt_horaireT);
             this.ribbonPageGroup1.Name = "ribbonPageGroup1";
             this.ribbonPageGroup1.Text = "ribbonPageGroup1";
             // 
@@ -109,6 +133,19 @@
             this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem1);
             this.ribbonPageGroup2.Name = "ribbonPageGroup2";
             this.ribbonPageGroup2.Text = "ribbonPageGroup2";
+            // 
+            // ribbonPage3
+            // 
+            this.ribbonPage3.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
+            this.ribbonPageGroup3});
+            this.ribbonPage3.Name = "ribbonPage3";
+            this.ribbonPage3.Text = "Pointage";
+            // 
+            // ribbonPageGroup3
+            // 
+            this.ribbonPageGroup3.ItemLinks.Add(this.bt_telecharger);
+            this.ribbonPageGroup3.Name = "ribbonPageGroup3";
+            this.ribbonPageGroup3.Text = "ribbonPageGroup3";
             // 
             // ribbonStatusBar
             // 
@@ -159,5 +196,9 @@
         private DevExpress.XtraBars.Ribbon.RibbonPage ribbonPage2;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup2;
         private DevExpress.XtraBars.BarButtonItem barButtonItem1;
+        private DevExpress.XtraBars.BarButtonItem bt_telecharger;
+        private DevExpress.XtraBars.Ribbon.RibbonPage ribbonPage3;
+        private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup3;
+        private DevExpress.XtraBars.BarButtonItem bt_horaireT;
     }
 }
