@@ -14,6 +14,8 @@ namespace DevPointage
     public partial class Form2 : DevExpress.XtraBars.Ribbon.RibbonForm
     {
         static public string annee_en_cours;
+        static public int plage_hrs=5;
+        static public int plage_retards = 15;
         public Form2()
         {
             InitializeComponent();

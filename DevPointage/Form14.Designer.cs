@@ -28,16 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.groupControl1 = new DevExpress.XtraEditors.GroupControl();
-            this.liste_mois = new System.Windows.Forms.ComboBox();
-            this.labelControl4 = new DevExpress.XtraEditors.LabelControl();
-            this.txt_matricule = new System.Windows.Forms.TextBox();
-            this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
-            this.lb_nom_prenom = new DevExpress.XtraEditors.LabelControl();
+            this.bt_apercu = new System.Windows.Forms.Button();
+            this.bt_recherche = new System.Windows.Forms.Button();
             this.txt_annee = new System.Windows.Forms.TextBox();
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
-            this.bt_recherche = new System.Windows.Forms.Button();
+            this.lb_nom_prenom = new DevExpress.XtraEditors.LabelControl();
+            this.txt_matricule = new System.Windows.Forms.TextBox();
+            this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
+            this.liste_mois = new System.Windows.Forms.ComboBox();
+            this.labelControl4 = new DevExpress.XtraEditors.LabelControl();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.entet2 = new System.Windows.Forms.DataGridView();
             this.panel2 = new System.Windows.Forms.Panel();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -58,11 +64,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).BeginInit();
             this.groupControl1.SuspendLayout();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.entet2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // groupControl1
             // 
+            this.groupControl1.Controls.Add(this.bt_apercu);
             this.groupControl1.Controls.Add(this.bt_recherche);
             this.groupControl1.Controls.Add(this.txt_annee);
             this.groupControl1.Controls.Add(this.labelControl2);
@@ -76,6 +84,73 @@
             this.groupControl1.Size = new System.Drawing.Size(791, 158);
             this.groupControl1.TabIndex = 0;
             this.groupControl1.Text = "Filtre Par ...";
+            // 
+            // bt_apercu
+            // 
+            this.bt_apercu.Location = new System.Drawing.Point(709, 110);
+            this.bt_apercu.Name = "bt_apercu";
+            this.bt_apercu.Size = new System.Drawing.Size(65, 32);
+            this.bt_apercu.TabIndex = 22;
+            this.bt_apercu.UseVisualStyleBackColor = true;
+            this.bt_apercu.Click += new System.EventHandler(this.bt_apercu_Click);
+            // 
+            // bt_recherche
+            // 
+            this.bt_recherche.Location = new System.Drawing.Point(248, 110);
+            this.bt_recherche.Name = "bt_recherche";
+            this.bt_recherche.Size = new System.Drawing.Size(28, 32);
+            this.bt_recherche.TabIndex = 21;
+            this.bt_recherche.UseVisualStyleBackColor = true;
+            // 
+            // txt_annee
+            // 
+            this.txt_annee.Enabled = false;
+            this.txt_annee.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_annee.Location = new System.Drawing.Point(592, 55);
+            this.txt_annee.Name = "txt_annee";
+            this.txt_annee.Size = new System.Drawing.Size(182, 32);
+            this.txt_annee.TabIndex = 20;
+            // 
+            // labelControl2
+            // 
+            this.labelControl2.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelControl2.Appearance.Options.UseFont = true;
+            this.labelControl2.Location = new System.Drawing.Point(517, 56);
+            this.labelControl2.Name = "labelControl2";
+            this.labelControl2.Size = new System.Drawing.Size(69, 24);
+            this.labelControl2.TabIndex = 19;
+            this.labelControl2.Text = "Anneé :";
+            // 
+            // lb_nom_prenom
+            // 
+            this.lb_nom_prenom.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_nom_prenom.Appearance.Options.UseFont = true;
+            this.lb_nom_prenom.Location = new System.Drawing.Point(347, 112);
+            this.lb_nom_prenom.Name = "lb_nom_prenom";
+            this.lb_nom_prenom.Size = new System.Drawing.Size(121, 24);
+            this.lb_nom_prenom.TabIndex = 18;
+            this.lb_nom_prenom.Text = "Nom & Prenom";
+            this.lb_nom_prenom.Visible = false;
+            // 
+            // txt_matricule
+            // 
+            this.txt_matricule.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_matricule.Location = new System.Drawing.Point(138, 109);
+            this.txt_matricule.Name = "txt_matricule";
+            this.txt_matricule.Size = new System.Drawing.Size(104, 32);
+            this.txt_matricule.TabIndex = 17;
+            this.txt_matricule.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_matricule_KeyDown);
+            this.txt_matricule.Leave += new System.EventHandler(this.txt_matricule_Leave);
+            // 
+            // labelControl1
+            // 
+            this.labelControl1.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelControl1.Appearance.Options.UseFont = true;
+            this.labelControl1.Location = new System.Drawing.Point(9, 112);
+            this.labelControl1.Name = "labelControl1";
+            this.labelControl1.Size = new System.Drawing.Size(94, 24);
+            this.labelControl1.TabIndex = 16;
+            this.labelControl1.Text = "Matricule :";
             // 
             // liste_mois
             // 
@@ -112,87 +187,20 @@
             this.labelControl4.TabIndex = 12;
             this.labelControl4.Text = "Mois:";
             // 
-            // txt_matricule
-            // 
-            this.txt_matricule.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_matricule.Location = new System.Drawing.Point(138, 109);
-            this.txt_matricule.Name = "txt_matricule";
-            this.txt_matricule.Size = new System.Drawing.Size(104, 32);
-            this.txt_matricule.TabIndex = 17;
-            this.txt_matricule.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_matricule_KeyDown);
-            this.txt_matricule.Leave += new System.EventHandler(this.txt_matricule_Leave);
-            // 
-            // labelControl1
-            // 
-            this.labelControl1.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelControl1.Appearance.Options.UseFont = true;
-            this.labelControl1.Location = new System.Drawing.Point(9, 112);
-            this.labelControl1.Name = "labelControl1";
-            this.labelControl1.Size = new System.Drawing.Size(94, 24);
-            this.labelControl1.TabIndex = 16;
-            this.labelControl1.Text = "Matricule :";
-            // 
-            // lb_nom_prenom
-            // 
-            this.lb_nom_prenom.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_nom_prenom.Appearance.Options.UseFont = true;
-            this.lb_nom_prenom.Location = new System.Drawing.Point(347, 112);
-            this.lb_nom_prenom.Name = "lb_nom_prenom";
-            this.lb_nom_prenom.Size = new System.Drawing.Size(121, 24);
-            this.lb_nom_prenom.TabIndex = 18;
-            this.lb_nom_prenom.Text = "Nom & Prenom";
-            this.lb_nom_prenom.Visible = false;
-            // 
-            // txt_annee
-            // 
-            this.txt_annee.Enabled = false;
-            this.txt_annee.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_annee.Location = new System.Drawing.Point(592, 55);
-            this.txt_annee.Name = "txt_annee";
-            this.txt_annee.Size = new System.Drawing.Size(182, 32);
-            this.txt_annee.TabIndex = 20;
-            // 
-            // labelControl2
-            // 
-            this.labelControl2.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelControl2.Appearance.Options.UseFont = true;
-            this.labelControl2.Location = new System.Drawing.Point(517, 56);
-            this.labelControl2.Name = "labelControl2";
-            this.labelControl2.Size = new System.Drawing.Size(69, 24);
-            this.labelControl2.TabIndex = 19;
-            this.labelControl2.Text = "Anneé :";
-            // 
-            // bt_recherche
-            // 
-            this.bt_recherche.Location = new System.Drawing.Point(248, 110);
-            this.bt_recherche.Name = "bt_recherche";
-            this.bt_recherche.Size = new System.Drawing.Size(28, 32);
-            this.bt_recherche.TabIndex = 21;
-            this.bt_recherche.UseVisualStyleBackColor = true;
-            // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.dataGridView1);
+            this.panel1.Controls.Add(this.entet2);
             this.panel1.Location = new System.Drawing.Point(13, 200);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1262, 579);
             this.panel1.TabIndex = 1;
             // 
-            // panel2
+            // entet2
             // 
-            this.panel2.BackColor = System.Drawing.Color.White;
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 801);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1307, 52);
-            this.panel2.TabIndex = 2;
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.entet2.AllowUserToAddRows = false;
+            this.entet2.AllowUserToDeleteRows = false;
+            this.entet2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.entet2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column1,
             this.Column2,
             this.Column3,
@@ -208,14 +216,34 @@
             this.Column13,
             this.Column14,
             this.Column15});
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 0);
+            this.entet2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.entet2.Location = new System.Drawing.Point(0, 0);
+            this.entet2.Name = "entet2";
+            this.entet2.ReadOnly = true;
+            this.entet2.RowHeadersWidth = 10;
+            this.entet2.RowTemplate.Height = 24;
+            this.entet2.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.entet2.Size = new System.Drawing.Size(1262, 579);
+            this.entet2.TabIndex = 0;
+            // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.White;
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel2.Location = new System.Drawing.Point(0, 801);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(1307, 52);
+            this.panel2.TabIndex = 2;
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(820, 13);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.RowHeadersWidth = 10;
+            this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(1262, 579);
-            this.dataGridView1.TabIndex = 0;
+            this.dataGridView1.Size = new System.Drawing.Size(455, 158);
+            this.dataGridView1.TabIndex = 3;
             // 
             // Column1
             // 
@@ -231,23 +259,24 @@
             this.Column2.MinimumWidth = 6;
             this.Column2.Name = "Column2";
             this.Column2.ReadOnly = true;
-            this.Column2.Width = 125;
             // 
             // Column3
             // 
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Column3.DefaultCellStyle = dataGridViewCellStyle1;
             this.Column3.HeaderText = "Entreé";
             this.Column3.MinimumWidth = 6;
             this.Column3.Name = "Column3";
             this.Column3.ReadOnly = true;
-            this.Column3.Width = 125;
             // 
             // Column4
             // 
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Column4.DefaultCellStyle = dataGridViewCellStyle2;
             this.Column4.HeaderText = "";
             this.Column4.MinimumWidth = 6;
             this.Column4.Name = "Column4";
             this.Column4.ReadOnly = true;
-            this.Column4.Width = 125;
             // 
             // Column5
             // 
@@ -255,7 +284,6 @@
             this.Column5.MinimumWidth = 6;
             this.Column5.Name = "Column5";
             this.Column5.ReadOnly = true;
-            this.Column5.Width = 125;
             // 
             // Column6
             // 
@@ -275,19 +303,21 @@
             // 
             // Column8
             // 
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Column8.DefaultCellStyle = dataGridViewCellStyle3;
             this.Column8.HeaderText = "";
             this.Column8.MinimumWidth = 6;
             this.Column8.Name = "Column8";
             this.Column8.ReadOnly = true;
-            this.Column8.Width = 125;
             // 
             // Column9
             // 
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Column9.DefaultCellStyle = dataGridViewCellStyle4;
             this.Column9.HeaderText = "Sortie";
             this.Column9.MinimumWidth = 6;
             this.Column9.Name = "Column9";
             this.Column9.ReadOnly = true;
-            this.Column9.Width = 125;
             // 
             // Column10
             // 
@@ -320,6 +350,7 @@
             this.Column13.MinimumWidth = 6;
             this.Column13.Name = "Column13";
             this.Column13.ReadOnly = true;
+            this.Column13.Visible = false;
             this.Column13.Width = 125;
             // 
             // Column14
@@ -328,6 +359,7 @@
             this.Column14.MinimumWidth = 6;
             this.Column14.Name = "Column14";
             this.Column14.ReadOnly = true;
+            this.Column14.Visible = false;
             this.Column14.Width = 125;
             // 
             // Column15
@@ -336,6 +368,7 @@
             this.Column15.MinimumWidth = 6;
             this.Column15.Name = "Column15";
             this.Column15.ReadOnly = true;
+            this.Column15.Visible = false;
             this.Column15.Width = 125;
             // 
             // Form14
@@ -343,6 +376,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1307, 853);
+            this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.groupControl1);
@@ -354,6 +388,7 @@
             this.groupControl1.ResumeLayout(false);
             this.groupControl1.PerformLayout();
             this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.entet2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
@@ -371,8 +406,10 @@
         private DevExpress.XtraEditors.LabelControl labelControl2;
         public System.Windows.Forms.Button bt_recherche;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView entet2;
         private System.Windows.Forms.Panel panel2;
+        public System.Windows.Forms.Button bt_apercu;
+        private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;

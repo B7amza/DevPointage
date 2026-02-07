@@ -242,5 +242,7 @@ namespace DevPointage
         {
             bt_modifier.Enabled = true;
         }
+
+        
     }
 }

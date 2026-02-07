@@ -1,6 +1,7 @@
 ﻿using DevExpress.XtraEditors;
 using System;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Windows.Forms;
 using zkemkeeper;
@@ -12,6 +13,7 @@ namespace DevPointage
         public Form4()
         {
             InitializeComponent();
+            ConnectSqlServer.Initialized();
         }
         CZKEM zkDevice = new CZKEM(); // كائن الاتصال بالجهاز
         private void Form4_Load(object sender, EventArgs e)
@@ -143,6 +145,43 @@ namespace DevPointage
             // عرض جميع البيانات بعد الانتهاء من قراءة كل الأجهزة
             gridControl1.DataSource = allData;
 
+            // حفظ البيانات في قاعدة البيانات داخل جدول chargement_pointage 
+            // ... بعد انتهاء حلقة جلب البيانات من الأجهزة وملء allData ...
+
+            // 1. التأكد من تهيئة إعدادات الاتصال (يجلب البيانات من Registry)
+            //DevPointage.ConnectSqlServer.Initialized();
+
+            int savedCount = 0;
+
+            // 2. البدء في عملية الحفظ لكل سجل في allData
+            foreach (DataRow row in allData.Rows)
+            {
+                // استعلام الإدخال مع التحقق من عدم التكرار (UPSERT pattern)
+                string query = @"
+        IF NOT EXISTS (SELECT 1 FROM CHARGEMENT_POITEUSE 
+                       WHERE MATRI = @matri 
+                       AND DATE_POINTAGE = @dateP 
+                       AND HEURS_POINTAGE = @hourP)
+        BEGIN
+            INSERT INTO CHARGEMENT_POITEUSE (MATRI, DATE_POINTAGE, HEURS_POINTAGE, DATE_TELECHARGEMENT)
+            VALUES (@matri, @dateP, @hourP, GETDATE())
+        END";
+
+                // تجهيز البارامترات لتجنب SQL Injection
+                SqlParameter[] parameters = {
+        new SqlParameter("@matri", row["Matricule"].ToString().Trim()),
+        new SqlParameter("@dateP", SqlDbType.Date) { Value = DateTime.Parse(row["Date_Pointage"].ToString()) },
+        new SqlParameter("@hourP", row["Heure_Pointage"].ToString().Trim())
+    };
+
+                // تنفيذ العملية باستخدام الكلاس الخاص بك
+                int result = DevPointage.ConnectSqlServer.ExecuteNonQuery(query, parameters);
+
+                if (result > 0) savedCount++;
+            }
+
+            MessageBox.Show($"✅ تم الحفظ بنجاح!\nعدد السجلات الجديدة المضافة: {savedCount}",
+                            "إتمام العملية", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
         }
 
