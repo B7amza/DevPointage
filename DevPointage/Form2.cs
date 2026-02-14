@@ -28,6 +28,8 @@ namespace DevPointage
         static public Form4 fn_telechargement;
         static public Form13 fn_horaire_travail;
         static public Form14 fn_pointage_mensuelle;
+        static public Form15 fn_gestion_absence;
+        static public Form16 fn_gerer_pointeuse;
 
 
 
@@ -102,6 +104,20 @@ namespace DevPointage
             fn_pointage_mensuelle = new Form14();
             fn_pointage_mensuelle.ShowDialog();
             fn_pointage_mensuelle.Dispose();
+        }
+
+        private void bt_absence_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            fn_gestion_absence = new Form15();
+            fn_gestion_absence.ShowDialog();
+            fn_gestion_absence.Dispose();
+        }
+
+        private void bt_GererPointeuse_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            fn_gerer_pointeuse = new Form16();
+            fn_gerer_pointeuse.ShowDialog();
+            fn_gerer_pointeuse.Dispose();
         }
     }
 }

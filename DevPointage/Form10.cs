@@ -279,6 +279,11 @@ namespace DevPointage
             }
         }
 
+        private void cb_affectation_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
         private void bt_modifier_Click(object sender, EventArgs e)
         {
             insertion_modification = 1; // Set to 1 for modification

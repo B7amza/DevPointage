@@ -57,12 +57,12 @@
             this.labelControl9 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl10 = new DevExpress.XtraEditors.LabelControl();
             this.groupControl3 = new DevExpress.XtraEditors.GroupControl();
-            this.labelControl11 = new DevExpress.XtraEditors.LabelControl();
-            this.cb_horaire_travail = new System.Windows.Forms.ComboBox();
-            this.dt_du = new System.Windows.Forms.DateTimePicker();
-            this.dt_au = new System.Windows.Forms.DateTimePicker();
-            this.labelControl12 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl13 = new DevExpress.XtraEditors.LabelControl();
+            this.labelControl12 = new DevExpress.XtraEditors.LabelControl();
+            this.dt_au = new System.Windows.Forms.DateTimePicker();
+            this.dt_du = new System.Windows.Forms.DateTimePicker();
+            this.cb_horaire_travail = new System.Windows.Forms.ComboBox();
+            this.labelControl11 = new DevExpress.XtraEditors.LabelControl();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).BeginInit();
             this.groupControl1.SuspendLayout();
@@ -333,6 +333,7 @@
             this.cb_affectation.Name = "cb_affectation";
             this.cb_affectation.Size = new System.Drawing.Size(300, 24);
             this.cb_affectation.TabIndex = 19;
+            this.cb_affectation.SelectedIndexChanged += new System.EventHandler(this.cb_affectation_SelectedIndexChanged);
             // 
             // cb_fonction
             // 
@@ -398,15 +399,45 @@
             this.groupControl3.TabIndex = 5;
             this.groupControl3.Text = "Plage Horaire...";
             // 
-            // labelControl11
+            // labelControl13
             // 
-            this.labelControl11.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelControl11.Appearance.Options.UseFont = true;
-            this.labelControl11.Location = new System.Drawing.Point(5, 62);
-            this.labelControl11.Name = "labelControl11";
-            this.labelControl11.Size = new System.Drawing.Size(175, 24);
-            this.labelControl11.TabIndex = 4;
-            this.labelControl11.Text = "Periode de Travail :";
+            this.labelControl13.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelControl13.Appearance.Options.UseFont = true;
+            this.labelControl13.Location = new System.Drawing.Point(668, 61);
+            this.labelControl13.Name = "labelControl13";
+            this.labelControl13.Size = new System.Drawing.Size(36, 24);
+            this.labelControl13.TabIndex = 25;
+            this.labelControl13.Text = "Au :";
+            this.labelControl13.Visible = false;
+            // 
+            // labelControl12
+            // 
+            this.labelControl12.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelControl12.Appearance.Options.UseFont = true;
+            this.labelControl12.Location = new System.Drawing.Point(471, 61);
+            this.labelControl12.Name = "labelControl12";
+            this.labelControl12.Size = new System.Drawing.Size(38, 24);
+            this.labelControl12.TabIndex = 22;
+            this.labelControl12.Text = "Du :";
+            this.labelControl12.Visible = false;
+            // 
+            // dt_au
+            // 
+            this.dt_au.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dt_au.Location = new System.Drawing.Point(710, 62);
+            this.dt_au.Name = "dt_au";
+            this.dt_au.Size = new System.Drawing.Size(119, 23);
+            this.dt_au.TabIndex = 24;
+            this.dt_au.Visible = false;
+            // 
+            // dt_du
+            // 
+            this.dt_du.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dt_du.Location = new System.Drawing.Point(515, 62);
+            this.dt_du.Name = "dt_du";
+            this.dt_du.Size = new System.Drawing.Size(119, 23);
+            this.dt_du.TabIndex = 23;
+            this.dt_du.Visible = false;
             // 
             // cb_horaire_travail
             // 
@@ -421,45 +452,15 @@
             this.cb_horaire_travail.Size = new System.Drawing.Size(260, 24);
             this.cb_horaire_travail.TabIndex = 22;
             // 
-            // dt_du
+            // labelControl11
             // 
-            this.dt_du.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dt_du.Location = new System.Drawing.Point(515, 62);
-            this.dt_du.Name = "dt_du";
-            this.dt_du.Size = new System.Drawing.Size(119, 23);
-            this.dt_du.TabIndex = 23;
-            this.dt_du.Visible = false;
-            // 
-            // dt_au
-            // 
-            this.dt_au.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dt_au.Location = new System.Drawing.Point(710, 62);
-            this.dt_au.Name = "dt_au";
-            this.dt_au.Size = new System.Drawing.Size(119, 23);
-            this.dt_au.TabIndex = 24;
-            this.dt_au.Visible = false;
-            // 
-            // labelControl12
-            // 
-            this.labelControl12.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelControl12.Appearance.Options.UseFont = true;
-            this.labelControl12.Location = new System.Drawing.Point(471, 61);
-            this.labelControl12.Name = "labelControl12";
-            this.labelControl12.Size = new System.Drawing.Size(38, 24);
-            this.labelControl12.TabIndex = 22;
-            this.labelControl12.Text = "Du :";
-            this.labelControl12.Visible = false;
-            // 
-            // labelControl13
-            // 
-            this.labelControl13.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelControl13.Appearance.Options.UseFont = true;
-            this.labelControl13.Location = new System.Drawing.Point(668, 61);
-            this.labelControl13.Name = "labelControl13";
-            this.labelControl13.Size = new System.Drawing.Size(36, 24);
-            this.labelControl13.TabIndex = 25;
-            this.labelControl13.Text = "Au :";
-            this.labelControl13.Visible = false;
+            this.labelControl11.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelControl11.Appearance.Options.UseFont = true;
+            this.labelControl11.Location = new System.Drawing.Point(5, 62);
+            this.labelControl11.Name = "labelControl11";
+            this.labelControl11.Size = new System.Drawing.Size(175, 24);
+            this.labelControl11.TabIndex = 4;
+            this.labelControl11.Text = "Periode de Travail :";
             // 
             // Form10
             // 

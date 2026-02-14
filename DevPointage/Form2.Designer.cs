@@ -35,6 +35,9 @@
             this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
             this.bt_telecharger = new DevExpress.XtraBars.BarButtonItem();
             this.bt_horaireT = new DevExpress.XtraBars.BarButtonItem();
+            this.bt_pointage = new DevExpress.XtraBars.BarButtonItem();
+            this.bt_absence = new DevExpress.XtraBars.BarButtonItem();
+            this.bt_GererPointeuse = new DevExpress.XtraBars.BarButtonItem();
             this.ribbonPage1 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPage2 = new DevExpress.XtraBars.Ribbon.RibbonPage();
@@ -43,7 +46,6 @@
             this.ribbonPageGroup3 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonStatusBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.pn_continer = new System.Windows.Forms.Panel();
-            this.bt_pointage = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).BeginInit();
             this.SuspendLayout();
             // 
@@ -57,9 +59,11 @@
             this.barButtonItem1,
             this.bt_telecharger,
             this.bt_horaireT,
-            this.bt_pointage});
+            this.bt_pointage,
+            this.bt_absence,
+            this.bt_GererPointeuse});
             this.ribbon.Location = new System.Drawing.Point(0, 0);
-            this.ribbon.MaxItemId = 7;
+            this.ribbon.MaxItemId = 9;
             this.ribbon.Name = "ribbon";
             this.ribbon.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.ribbonPage1,
@@ -108,6 +112,30 @@
             this.bt_horaireT.Name = "bt_horaireT";
             this.bt_horaireT.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.bt_horaireT_ItemClick);
             // 
+            // bt_pointage
+            // 
+            this.bt_pointage.Caption = "Pointage";
+            this.bt_pointage.Id = 6;
+            this.bt_pointage.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("bt_pointage.ImageOptions.LargeImage")));
+            this.bt_pointage.Name = "bt_pointage";
+            this.bt_pointage.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.bt_pointage_ItemClick);
+            // 
+            // bt_absence
+            // 
+            this.bt_absence.Caption = "Absence";
+            this.bt_absence.Id = 7;
+            this.bt_absence.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("bt_absence.ImageOptions.LargeImage")));
+            this.bt_absence.Name = "bt_absence";
+            this.bt_absence.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.bt_absence_ItemClick);
+            // 
+            // bt_GererPointeuse
+            // 
+            this.bt_GererPointeuse.Caption = "Gerer Pointeuse";
+            this.bt_GererPointeuse.Id = 8;
+            this.bt_GererPointeuse.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem2.ImageOptions.LargeImage")));
+            this.bt_GererPointeuse.Name = "bt_GererPointeuse";
+            this.bt_GererPointeuse.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.bt_GererPointeuse_ItemClick);
+            // 
             // ribbonPage1
             // 
             this.ribbonPage1.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
@@ -120,6 +148,7 @@
             this.ribbonPageGroup1.ItemLinks.Add(this.bt_employe);
             this.ribbonPageGroup1.ItemLinks.Add(this.bt_horaireT);
             this.ribbonPageGroup1.ItemLinks.Add(this.bt_pointage);
+            this.ribbonPageGroup1.ItemLinks.Add(this.bt_absence);
             this.ribbonPageGroup1.Name = "ribbonPageGroup1";
             this.ribbonPageGroup1.Text = "ribbonPageGroup1";
             // 
@@ -147,6 +176,7 @@
             // ribbonPageGroup3
             // 
             this.ribbonPageGroup3.ItemLinks.Add(this.bt_telecharger);
+            this.ribbonPageGroup3.ItemLinks.Add(this.bt_GererPointeuse);
             this.ribbonPageGroup3.Name = "ribbonPageGroup3";
             this.ribbonPageGroup3.Text = "ribbonPageGroup3";
             // 
@@ -164,14 +194,6 @@
             this.pn_continer.Name = "pn_continer";
             this.pn_continer.Size = new System.Drawing.Size(948, 425);
             this.pn_continer.TabIndex = 2;
-            // 
-            // bt_pointage
-            // 
-            this.bt_pointage.Caption = "Pointage";
-            this.bt_pointage.Id = 6;
-            this.bt_pointage.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem2.ImageOptions.LargeImage")));
-            this.bt_pointage.Name = "bt_pointage";
-            this.bt_pointage.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.bt_pointage_ItemClick);
             // 
             // Form2
             // 
@@ -212,5 +234,7 @@
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup3;
         private DevExpress.XtraBars.BarButtonItem bt_horaireT;
         private DevExpress.XtraBars.BarButtonItem bt_pointage;
+        private DevExpress.XtraBars.BarButtonItem bt_absence;
+        private DevExpress.XtraBars.BarButtonItem bt_GererPointeuse;
     }
 }

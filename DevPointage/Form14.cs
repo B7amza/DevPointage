@@ -27,6 +27,9 @@ namespace DevPointage
         {
             txt_annee.Text = Form2.annee_en_cours;
             ActiveControl = txt_matricule;
+
+            liste_mois.SelectedIndex = DateTime.Now.Month - 1;
+
         }
 
         private void load_personnel_details()
@@ -365,6 +368,21 @@ namespace DevPointage
                     }
 
                 }
+                //////////////************************HB*************************//////////////////////
+                ///
+                /// 
+                DataTable dtABS = new DataTable();
+                string c_conge,lib_conge;
+
+                LoadAbsences(matri, d_jour, dtABS);
+
+                    if (dtABS.Rows.Count > 0)
+                    {
+                        c_conge = dtABS.Rows[0]["c_conge"].ToString();
+                        lib_conge = dtABS.Rows[0]["lib"].ToString();
+                        entet2.Rows[i - 1].Cells[10].Value = lib_conge;
+                    }
+
                 ///*********************************************************************************************************/
                 //if (etat_pointage_mensuelleTableAdapter.GetData(matri, d_jour).Count > 0)
                 //{
@@ -564,6 +582,44 @@ namespace DevPointage
             return dt.Rows.Count > 0
                 ? dt.Rows[0]["total_count"].ToString()
                 : "0";
+        }
+
+        private string LoadAbsences(string matricule, DateTime date_jr,DataTable dtABS)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(matricule)) return "";
+
+                // الاستعلام لجلب كود الإجازة بناءً على الموظف والتاريخ
+                string query = @"SELECT  COUNT(*) AS count, A.C_CONGE, T.LIB
+                                    FROM [ABS] A
+                                    INNER JOIN [type_conge] T ON A.C_CONGE = T.CODE
+                                    WHERE A.DATE1 = @date_jr 
+                                      AND A.MATRI = @matricule
+                                    GROUP BY A.C_CONGE, T.LIB";
+
+                SqlParameter[] parameters = {
+            new SqlParameter("@date_jr", SqlDbType.Date) { Value = date_jr.Date }, // نستخدم .Date لضمان مقارنة التاريخ فقط بدون الوقت
+            new SqlParameter("@matricule", SqlDbType.VarChar) { Value = matricule }
+        };
+
+                DataTable dt = ConnectSqlServer.ExecuteSelect(query, parameters);
+                dtABS.Merge(dt); // دمج النتائج في DataTable الممررة كوسيط
+
+                // التحقق مما إذا كان هناك نتائج وإرجاع القيمة
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    return dt.Rows[0]["C_CONGE"].ToString();
+                }
+
+                return ""; // إرجاع نص فارغ في حال عدم وجود بيانات
+            }
+            catch (Exception ex)
+            {
+                // في حال حدوث خطأ، نعرض الرسالة ونرجع نص فارغ لضمان عمل البرنامج
+                MessageBox.Show("Erreur lors du chargement : " + ex.Message);
+                return "";
+            }
         }
     }
 }
