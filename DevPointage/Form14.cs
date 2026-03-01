@@ -106,18 +106,8 @@ namespace DevPointage
                     LeJour, 
                     JourSemaine, 
                     HeureEntree, 
-                    HeureSortie, 
-                    DureeTravailMinutes,
-                    Col_6_StatutRetard,
-                    Col_7_HeureTheoriqueEntree,
-                    Col_8_HeureTheoriqueSortie,
-                    Col_9_HeuresSupplementaires,
-                    Col_10_HeuresAbsence,
-                    Col_11_MotifAbsence,
-                    Col_12_ValidationChef,
-                    Col_13_Commentaire,
-                    Col_14_ChampLibre1,
-                    Col_15_ChampLibre2
+                    HeureSortie
+                    
                 FROM 
                     Vue_Pointage_mensuelle 
                 WHERE 
@@ -126,6 +116,32 @@ namespace DevPointage
                     YEAR(LeJour) = @annee
                 ORDER BY 
                     LeJour";
+
+            //string query = @"
+            //    SELECT 
+            //        LeJour, 
+            //        JourSemaine, 
+            //        HeureEntree, 
+            //        HeureSortie, 
+            //        DureeTravailMinutes,
+            //        Col_6_StatutRetard,
+            //        Col_7_HeureTheoriqueEntree,
+            //        Col_8_HeureTheoriqueSortie,
+            //        Col_9_HeuresSupplementaires,
+            //        Col_10_HeuresAbsence,
+            //        Col_11_MotifAbsence,
+            //        Col_12_ValidationChef,
+            //        Col_13_Commentaire,
+            //        Col_14_ChampLibre1,
+            //        Col_15_ChampLibre2
+            //    FROM 
+            //        Vue_Pointage_mensuelle 
+            //    WHERE 
+            //        MATRI = @matri AND 
+            //        MONTH(LeJour) = @mois AND 
+            //        YEAR(LeJour) = @annee
+            //    ORDER BY 
+            //        LeJour";
 
             // 4. تجهيز البارامترات
             SqlParameter[] parameters = {
@@ -149,7 +165,7 @@ namespace DevPointage
                 dataGridView1.Columns["JourSemaine"].HeaderText = "اليوم";
                 dataGridView1.Columns["HeureEntree"].HeaderText = "وقت الدخول";
                 dataGridView1.Columns["HeureSortie"].HeaderText = "وقت الخروج";
-                dataGridView1.Columns["DureeTravailMinutes"].HeaderText = "مدة العمل (دقيقة)";
+               // dataGridView1.Columns["DureeTravailMinutes"].HeaderText = "مدة العمل (دقيقة)";
                 // يمكنك إضافة المزيد من التنسيقات هنا
             }
         }

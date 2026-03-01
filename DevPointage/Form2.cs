@@ -30,6 +30,7 @@ namespace DevPointage
         static public Form14 fn_pointage_mensuelle;
         static public Form15 fn_gestion_absence;
         static public Form16 fn_gerer_pointeuse;
+        static public Form17 fn_pointage_journalier;
 
 
 
@@ -118,6 +119,14 @@ namespace DevPointage
             fn_gerer_pointeuse = new Form16();
             fn_gerer_pointeuse.ShowDialog();
             fn_gerer_pointeuse.Dispose();
+        }
+
+        private void bt_PointageJR_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            fn_pointage_journalier = new Form17();
+            fn_pointage_journalier.ShowDialog();
+            fn_pointage_journalier.Dispose();
+
         }
     }
 }
