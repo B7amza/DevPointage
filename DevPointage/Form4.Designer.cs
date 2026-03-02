@@ -34,22 +34,26 @@
             this.bt_fermer = new DevExpress.XtraEditors.SimpleButton();
             this.panel2 = new System.Windows.Forms.Panel();
             this.tableau = new System.Windows.Forms.DataGridView();
+            this.Column1 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.panel4 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.gridControl1 = new DevExpress.XtraGrid.GridControl();
             this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.panel5 = new System.Windows.Forms.Panel();
-            this.Column1 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.bt_telechargerAttlog = new DevExpress.XtraEditors.SimpleButton();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.panel_button.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tableau)).BeginInit();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
+            this.panel5.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel_button
             // 
+            this.panel_button.Controls.Add(this.bt_telechargerAttlog);
             this.panel_button.Controls.Add(this.bt_telechargerD);
             this.panel_button.Controls.Add(this.bt_fermer);
             this.panel_button.Dock = System.Windows.Forms.DockStyle.Right;
@@ -105,6 +109,15 @@
             this.tableau.Size = new System.Drawing.Size(655, 284);
             this.tableau.TabIndex = 1;
             // 
+            // Column1
+            // 
+            this.Column1.FalseValue = "N";
+            this.Column1.HeaderText = "";
+            this.Column1.MinimumWidth = 6;
+            this.Column1.Name = "Column1";
+            this.Column1.TrueValue = "O";
+            this.Column1.Width = 25;
+            // 
             // panel4
             // 
             this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -141,20 +154,29 @@
             // 
             // panel5
             // 
+            this.panel5.Controls.Add(this.progressBar1);
             this.panel5.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel5.Location = new System.Drawing.Point(0, 455);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(655, 58);
             this.panel5.TabIndex = 1;
             // 
-            // Column1
+            // bt_telechargerAttlog
             // 
-            this.Column1.FalseValue = "N";
-            this.Column1.HeaderText = "";
-            this.Column1.MinimumWidth = 6;
-            this.Column1.Name = "Column1";
-            this.Column1.TrueValue = "O";
-            this.Column1.Width = 25;
+            this.bt_telechargerAttlog.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("simpleButton1.ImageOptions.Image")));
+            this.bt_telechargerAttlog.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
+            this.bt_telechargerAttlog.Location = new System.Drawing.Point(28, 112);
+            this.bt_telechargerAttlog.Name = "bt_telechargerAttlog";
+            this.bt_telechargerAttlog.Size = new System.Drawing.Size(62, 62);
+            this.bt_telechargerAttlog.TabIndex = 2;
+            this.bt_telechargerAttlog.Click += new System.EventHandler(this.bt_telechargerAttlog_Click);
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(3, 3);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(646, 23);
+            this.progressBar1.TabIndex = 0;
             // 
             // Form4
             // 
@@ -176,6 +198,7 @@
             this.panel3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).EndInit();
+            this.panel5.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -193,5 +216,7 @@
         private DevExpress.XtraGrid.GridControl gridControl1;
         private DevExpress.XtraGrid.Views.Grid.GridView gridView1;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Column1;
+        private DevExpress.XtraEditors.SimpleButton bt_telechargerAttlog;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }
