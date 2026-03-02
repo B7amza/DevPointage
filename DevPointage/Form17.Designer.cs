@@ -36,6 +36,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.entet2 = new System.Windows.Forms.DataGridView();
             this.groupControl1 = new DevExpress.XtraEditors.GroupControl();
+            this.bt_imprimer = new System.Windows.Forms.Button();
             this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
             this.cb_horaire_travail = new System.Windows.Forms.ComboBox();
             this.ch_matricule = new System.Windows.Forms.CheckBox();
@@ -125,6 +126,7 @@
             // 
             // groupControl1
             // 
+            this.groupControl1.Controls.Add(this.bt_imprimer);
             this.groupControl1.Controls.Add(this.labelControl3);
             this.groupControl1.Controls.Add(this.cb_horaire_travail);
             this.groupControl1.Controls.Add(this.ch_matricule);
@@ -141,10 +143,20 @@
             this.groupControl1.Controls.Add(this.labelControl4);
             this.groupControl1.Location = new System.Drawing.Point(12, 12);
             this.groupControl1.Name = "groupControl1";
-            this.groupControl1.Size = new System.Drawing.Size(791, 232);
+            this.groupControl1.Size = new System.Drawing.Size(799, 232);
             this.groupControl1.TabIndex = 2;
             this.groupControl1.Text = "Filtre Par ...";
             this.groupControl1.Paint += new System.Windows.Forms.PaintEventHandler(this.groupControl1_Paint);
+            // 
+            // bt_imprimer
+            // 
+            this.bt_imprimer.Image = global::DevPointage.Properties.Resources.print2;
+            this.bt_imprimer.Location = new System.Drawing.Point(716, 147);
+            this.bt_imprimer.Name = "bt_imprimer";
+            this.bt_imprimer.Size = new System.Drawing.Size(75, 72);
+            this.bt_imprimer.TabIndex = 29;
+            this.bt_imprimer.UseVisualStyleBackColor = true;
+            this.bt_imprimer.Click += new System.EventHandler(this.bt_imprimer_Click);
             // 
             // labelControl3
             // 
@@ -210,9 +222,10 @@
             // 
             // bt_apercu
             // 
-            this.bt_apercu.Location = new System.Drawing.Point(713, 151);
+            this.bt_apercu.Image = global::DevPointage.Properties.Resources.search2;
+            this.bt_apercu.Location = new System.Drawing.Point(637, 147);
             this.bt_apercu.Name = "bt_apercu";
-            this.bt_apercu.Size = new System.Drawing.Size(65, 69);
+            this.bt_apercu.Size = new System.Drawing.Size(75, 72);
             this.bt_apercu.TabIndex = 22;
             this.bt_apercu.UseVisualStyleBackColor = true;
             this.bt_apercu.Click += new System.EventHandler(this.bt_apercu_Click);
@@ -291,7 +304,7 @@
             "Ocrobre",
             "Novembre",
             "Décembre"});
-            this.cb_structure.Location = new System.Drawing.Point(163, 81);
+            this.cb_structure.Location = new System.Drawing.Point(171, 81);
             this.cb_structure.Margin = new System.Windows.Forms.Padding(4);
             this.cb_structure.Name = "cb_structure";
             this.cb_structure.Size = new System.Drawing.Size(315, 31);
@@ -487,6 +500,7 @@
         private System.Windows.Forms.CheckBox ch_structure;
         private DevExpress.XtraEditors.LabelControl labelControl3;
         public System.Windows.Forms.ComboBox cb_horaire_travail;
+        public System.Windows.Forms.Button bt_imprimer;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column5;

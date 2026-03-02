@@ -147,7 +147,7 @@ namespace DevPointage
 
         private void cb_structure_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+           // lb_direction.Text = cb_structure.Text;
         }
 
         private void ch_structure_CheckedChanged(object sender, EventArgs e)
@@ -224,12 +224,18 @@ namespace DevPointage
                 tableau.DataSource = null;
                 if (cb_structure.SelectedIndex == -1) return;
                 string c_affect = cb_structure.SelectedValue.ToString();
-                string query = "SELECT matricule,concat(nom,'  ',prenom) as nom FROM Personnel WHERE id_affectation = @c_affect";
+                string query = "SELECT matricule,CONCAT(ISNULL(nom,''), ' ', ISNULL(prenom,'')) as nom FROM Personnel WHERE id_affectation = @c_affect";
                 SqlParameter[] parameters = {
               new SqlParameter("@c_affect", c_affect)
                                         };
                 DataTable dt = ConnectSqlServer.ExecuteSelect(query, parameters);
+
                 tableau.DataSource = dt;
+                if (tableau.Columns["nom"] != null)
+                {
+                    tableau.Columns["nom"].Width = 250; // جرب رفع القيمة حتى يظهر الاسم كاملاً
+                    tableau.Columns["nom"].HeaderText = "الاسم واللقب"; // اختياري لتغيير العنوان
+                }
             }
             else if (ch_matricule.Checked)
             {
@@ -239,18 +245,28 @@ namespace DevPointage
                     MessageBox.Show("الرجاء إدخال رقم المستخدم", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                string query = "SELECT matricule,concat(nom,'  ',prenom) as nom FROM Personnel where matricule=@matricule";
+                string query = "SELECT matricule,CONCAT(ISNULL(nom,''), ' ', ISNULL(prenom,'')) as nom FROM Personnel where matricule=@matricule";
                 SqlParameter[] parameters = {
               new SqlParameter("@matricule", txt_matricule.Text) };
                 DataTable dt = ConnectSqlServer.ExecuteSelect(query,parameters);
                 tableau.DataSource = dt;
+                if (tableau.Columns["nom"] != null)
+                {
+                    tableau.Columns["nom"].Width = 250; // جرب رفع القيمة حتى يظهر الاسم كاملاً
+                    tableau.Columns["nom"].HeaderText = "الاسم واللقب"; // اختياري لتغيير العنوان
+                }
             }
             else if (ch_tous.Checked)
             {
                 tableau.DataSource = null;
-                string query = "SELECT matricule,concat(nom,'  ',prenom) as nom FROM Personnel";
+                string query = "SELECT matricule,CONCAT(ISNULL(nom,''), ' ', ISNULL(prenom,'')) as nom FROM Personnel";
                 DataTable dt = ConnectSqlServer.ExecuteSelect(query);
                 tableau.DataSource = dt;
+                if (tableau.Columns["nom"] != null)
+                {
+                    tableau.Columns["nom"].Width = 250; // جرب رفع القيمة حتى يظهر الاسم كاملاً
+                    tableau.Columns["nom"].HeaderText = "الاسم واللقب"; // اختياري لتغيير العنوان
+                }
             }
 
             int position = 0, nbr_transport, nbr_pannier;
@@ -574,6 +590,54 @@ namespace DevPointage
         private void tableau_Scroll(object sender, ScrollEventArgs e)
         {
             entet2.FirstDisplayedScrollingRowIndex = e.NewValue;
+        }
+
+        public DataSet ds;
+
+
+        public Reports.XtraReport_PointageJR XtraReport_PointageJR1 = new Reports.XtraReport_PointageJR();
+        private void bt_imprimer_Click(object sender, EventArgs e)
+        {
+            Form2.fn_imprission = new Form_imprission();
+            ds = new DataSet1();
+            ds.Tables["dts_pointage"].Clear();
+
+            // يفضل التأكد من وجود أسطر قبل البدء
+            for (int i = 0; i < entet2.RowCount; i++)
+            {
+                // دالة مساعدة لتجنب التكرار والتعامل مع القيم الفارغة
+                ds.Tables["dts_pointage"].Rows.Add(
+                    GetCellValue(entet2, i, 0),
+                    GetCellValue(entet2, i, 1),
+                    GetCellValue(entet2, i, 2),
+                    GetCellValue(entet2, i, 3),
+                    GetCellValue(entet2, i, 4),
+                    GetCellValue(entet2, i, 5),
+                    GetCellValue(entet2, i, 6),
+                    GetCellValue(entet2, i, 7),
+                    GetCellValue(entet2, i, 8),
+                    cb_structure.Text,
+                    GetCellValue(tableau, i, 0),
+                    GetCellValue(tableau, i, 1),
+                    date_jour.Value.ToString("d"),
+                    date_jour.Value.ToString("MMMM", new System.Globalization.CultureInfo("ar-AR"))
+                );
+            }
+
+            XtraReport_PointageJR1.DataSource = ds;
+            XtraReport_PointageJR1.RequestParameters = false;
+
+            // تأكد من أن Form2 والتابع fn_imprission مهيآن بشكل صحيح
+            Form2.fn_imprission.documentViewer1.DocumentSource = XtraReport_PointageJR1;
+            Form2.fn_imprission.ShowDialog();
+        }
+
+        // دالة مساعدة لجعل الكود أنظف
+        private string GetCellValue(DataGridView dgv, int rowIndex, int colIndex)
+        {
+            var value = dgv.Rows[rowIndex].Cells[colIndex].Value;
+            // إذا كانت القيمة فارغة، نرجع نقطة أو نص فارغ حسب رغبتك
+            return value != null ? value.ToString() : ".";
         }
 
         private void chargement_horaire_travail()

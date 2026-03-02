@@ -31,6 +31,7 @@ namespace DevPointage
         static public Form15 fn_gestion_absence;
         static public Form16 fn_gerer_pointeuse;
         static public Form17 fn_pointage_journalier;
+        static public Form_imprission fn_imprission;
 
 
 

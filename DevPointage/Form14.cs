@@ -600,6 +600,54 @@ namespace DevPointage
                 : "0";
         }
 
+        public DataSet ds;
+        
+        
+        public Reports.XtraReport_PointageM XtraReport_PointageM1 = new Reports.XtraReport_PointageM();
+        private void bt_imprimer_Click(object sender, EventArgs e)
+        {
+            Form2.fn_imprission = new Form_imprission();
+            ds = new DataSet1();
+            ds.Tables["dts_pointage"].Clear();
+
+            // يفضل التأكد من وجود أسطر قبل البدء
+            for (int i = 0; i < entet2.RowCount - 1; i++)
+            {
+                // دالة مساعدة لتجنب التكرار والتعامل مع القيم الفارغة
+                ds.Tables["dts_pointage"].Rows.Add(
+                    GetCellValue(entet2, i, 1),
+                    GetCellValue(entet2, i, 2),
+                    GetCellValue(entet2, i, 3),
+                    GetCellValue(entet2, i, 4),
+                    GetCellValue(entet2, i, 5),
+                    GetCellValue(entet2, i, 6),
+                    GetCellValue(entet2, i, 7),
+                    GetCellValue(entet2, i, 8),
+                    GetCellValue(entet2, i, 9),
+                    GetCellValue(entet2, i, 10),
+                    txt_matricule.Text,
+                    lb_nom_prenom.Text,
+                    liste_mois.SelectedItem.ToString(),
+                    txt_annee.Text
+                );
+            }
+
+            XtraReport_PointageM1.DataSource = ds;
+            XtraReport_PointageM1.RequestParameters = false;
+
+            // تأكد من أن Form2 والتابع fn_imprission مهيآن بشكل صحيح
+            Form2.fn_imprission.documentViewer1.DocumentSource = XtraReport_PointageM1;
+            Form2.fn_imprission.ShowDialog();
+        }
+
+        // دالة مساعدة لجعل الكود أنظف
+        private string GetCellValue(DataGridView dgv, int rowIndex, int colIndex)
+        {
+            var value = dgv.Rows[rowIndex].Cells[colIndex].Value;
+            // إذا كانت القيمة فارغة، نرجع نقطة أو نص فارغ حسب رغبتك
+            return value != null ? value.ToString() : ".";
+        }
+
         private string LoadAbsences(string matricule, DateTime date_jr,DataTable dtABS)
         {
             try
