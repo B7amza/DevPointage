@@ -361,7 +361,7 @@ namespace DevPointage
                 {
                     c_conge = dtABS.Rows[0]["c_conge"].ToString();
                     lib_conge = dtABS.Rows[0]["lib"].ToString();
-                    entet2.Rows[i - 1].Cells[10].Value = lib_conge;
+                    entet2.Rows[i - 1].Cells[8].Value = lib_conge;
                 }
 
                 ///*********************************************************************************************************/

@@ -138,6 +138,18 @@
     <Compile Include="Form17.Designer.cs">
       <DependentUpon>Form17.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form18.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form18.Designer.cs">
+      <DependentUpon>Form18.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form19.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form19.Designer.cs">
+      <DependentUpon>Form19.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form2.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -194,6 +206,12 @@
     <Compile Include="uc_structure.Designer.cs">
       <DependentUpon>uc_structure.cs</DependentUpon>
     </Compile>
+    <Compile Include="uc_typeconge.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="uc_typeconge.Designer.cs">
+      <DependentUpon>uc_typeconge.cs</DependentUpon>
+    </Compile>
     <Compile Include="ZKHelper.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
@@ -221,6 +239,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form17.resx">
       <DependentUpon>Form17.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form18.resx">
+      <DependentUpon>Form18.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form19.resx">
+      <DependentUpon>Form19.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form2.resx">
       <DependentUpon>Form2.cs</DependentUpon>
@@ -259,6 +283,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="uc_structure.resx">
       <DependentUpon>uc_structure.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="uc_typeconge.resx">
+      <DependentUpon>uc_typeconge.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="App.config" />
     <None Include="DataSet1.xsc">

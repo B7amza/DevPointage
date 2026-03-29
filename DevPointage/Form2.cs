@@ -16,6 +16,7 @@ namespace DevPointage
         static public string annee_en_cours;
         static public int plage_hrs=5;
         static public int plage_retards = 15;
+        static public int nbr_machine = 8;
         public Form2()
         {
             InitializeComponent();
@@ -39,6 +40,7 @@ namespace DevPointage
         uc_employe uc_employe1 = new uc_employe();
         uc_structure uc_structure1 = new uc_structure();
         uc_fonction uc_fonction1 = new uc_fonction();
+        uc_typeconge uc_typeconge1 = new uc_typeconge();
 
 
         private void Form2_FormClosed(object sender, FormClosedEventArgs e)
@@ -128,6 +130,11 @@ namespace DevPointage
             fn_pointage_journalier.ShowDialog();
             fn_pointage_journalier.Dispose();
 
+        }
+
+        private void bt_typeconge_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            LoadUC(uc_typeconge1);
         }
     }
 }

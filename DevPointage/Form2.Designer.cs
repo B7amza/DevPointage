@@ -38,6 +38,7 @@
             this.bt_pointage = new DevExpress.XtraBars.BarButtonItem();
             this.bt_absence = new DevExpress.XtraBars.BarButtonItem();
             this.bt_GererPointeuse = new DevExpress.XtraBars.BarButtonItem();
+            this.bt_PointageJR = new DevExpress.XtraBars.BarButtonItem();
             this.ribbonPage1 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPage2 = new DevExpress.XtraBars.Ribbon.RibbonPage();
@@ -46,7 +47,7 @@
             this.ribbonPageGroup3 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonStatusBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.pn_continer = new System.Windows.Forms.Panel();
-            this.bt_PointageJR = new DevExpress.XtraBars.BarButtonItem();
+            this.bt_typeconge = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).BeginInit();
             this.SuspendLayout();
             // 
@@ -63,9 +64,10 @@
             this.bt_pointage,
             this.bt_absence,
             this.bt_GererPointeuse,
-            this.bt_PointageJR});
+            this.bt_PointageJR,
+            this.bt_typeconge});
             this.ribbon.Location = new System.Drawing.Point(0, 0);
-            this.ribbon.MaxItemId = 10;
+            this.ribbon.MaxItemId = 11;
             this.ribbon.Name = "ribbon";
             this.ribbon.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.ribbonPage1,
@@ -138,6 +140,14 @@
             this.bt_GererPointeuse.Name = "bt_GererPointeuse";
             this.bt_GererPointeuse.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.bt_GererPointeuse_ItemClick);
             // 
+            // bt_PointageJR
+            // 
+            this.bt_PointageJR.Caption = "Pointage Journalier";
+            this.bt_PointageJR.Id = 9;
+            this.bt_PointageJR.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("bt_PointageJR.ImageOptions.LargeImage")));
+            this.bt_PointageJR.Name = "bt_PointageJR";
+            this.bt_PointageJR.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.bt_PointageJR_ItemClick);
+            // 
             // ribbonPage1
             // 
             this.ribbonPage1.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
@@ -166,6 +176,7 @@
             // 
             this.ribbonPageGroup2.ItemLinks.Add(this.bt_affectation);
             this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem1);
+            this.ribbonPageGroup2.ItemLinks.Add(this.bt_typeconge);
             this.ribbonPageGroup2.Name = "ribbonPageGroup2";
             this.ribbonPageGroup2.Text = "ribbonPageGroup2";
             // 
@@ -198,13 +209,13 @@
             this.pn_continer.Size = new System.Drawing.Size(948, 425);
             this.pn_continer.TabIndex = 2;
             // 
-            // bt_PointageJR
+            // bt_typeconge
             // 
-            this.bt_PointageJR.Caption = "Pointage Journalier";
-            this.bt_PointageJR.Id = 9;
-            this.bt_PointageJR.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem2.ImageOptions.LargeImage")));
-            this.bt_PointageJR.Name = "bt_PointageJR";
-            this.bt_PointageJR.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.bt_PointageJR_ItemClick);
+            this.bt_typeconge.Caption = "Type Congé";
+            this.bt_typeconge.Id = 10;
+            this.bt_typeconge.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("bt_typeconge.ImageOptions.LargeImage")));
+            this.bt_typeconge.Name = "bt_typeconge";
+            this.bt_typeconge.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.bt_typeconge_ItemClick);
             // 
             // Form2
             // 
@@ -248,5 +259,6 @@
         private DevExpress.XtraBars.BarButtonItem bt_absence;
         private DevExpress.XtraBars.BarButtonItem bt_GererPointeuse;
         private DevExpress.XtraBars.BarButtonItem bt_PointageJR;
+        private DevExpress.XtraBars.BarButtonItem bt_typeconge;
     }
 }
