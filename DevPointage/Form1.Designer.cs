@@ -33,9 +33,9 @@
             // 
             // bt_connexion
             // 
-            this.bt_connexion.Location = new System.Drawing.Point(185, 200);
+            this.bt_connexion.Location = new System.Drawing.Point(53, 353);
             this.bt_connexion.Name = "bt_connexion";
-            this.bt_connexion.Size = new System.Drawing.Size(196, 37);
+            this.bt_connexion.Size = new System.Drawing.Size(265, 37);
             this.bt_connexion.TabIndex = 0;
             this.bt_connexion.Text = "Connexion";
             this.bt_connexion.Click += new System.EventHandler(this.bt_connexion_Click);
@@ -44,7 +44,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(604, 285);
+            this.ClientSize = new System.Drawing.Size(424, 471);
             this.Controls.Add(this.bt_connexion);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";

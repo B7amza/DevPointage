@@ -136,5 +136,15 @@ namespace DevPointage
         {
             LoadUC(uc_typeconge1);
         }
+
+        private void bt_ferie_ItemClick(object sender, ItemClickEventArgs e)
+        {
+
+        }
+
+        private void bt_principale_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            LoadUC(uc_accueil1);
+        }
     }
 }

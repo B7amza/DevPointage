@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -522,6 +523,33 @@ namespace DevPointage
             
             // تحديث الـ GridControl لعرض البيانات الجديدة
             // LoadDataGrid(); 
+        }
+
+        // ✅ تصدير البيانات إلى Excel و PDF باستخدام DevExpress
+        private void bt_exportexcel_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sd = new SaveFileDialog();
+            sd.Filter = "xlsx files (*.xlsx)|*.xlsx";
+            sd.FilterIndex = 1;
+            sd.RestoreDirectory = true;
+            if (sd.ShowDialog() == DialogResult.OK)
+            {
+                gridControl1.ExportToXlsx(sd.FileName);
+                Process.Start(sd.FileName);
+            }
+        }
+
+        private void bt_exportpdf_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sd = new SaveFileDialog();
+            sd.Filter = "Pdf files (*.pdf)|*.pdf";
+            sd.FilterIndex = 1;
+            sd.RestoreDirectory = true;
+            if (sd.ShowDialog() == DialogResult.OK)
+            {
+                gridControl1.ExportToPdf(sd.FileName);
+                Process.Start(sd.FileName);
+            }
         }
     }
 }

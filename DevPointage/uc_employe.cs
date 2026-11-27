@@ -17,7 +17,10 @@ namespace DevPointage
         public uc_employe()
         {
             InitializeComponent();
+            ConnectSqlServer.Initialized(); // Initialize the SQL Server connection
         }
+
+        static public int etat_employee = 0; // 0: actif, 1: inactif
         private void load_personnel_data()
         {
             // Load personnel data into the grid control gridControl1.DataSource = dt; 
@@ -89,6 +92,81 @@ namespace DevPointage
             Form2.fn_personnel.Dispose(); // Dispose the form after closing
             load_personnel_data();
         }
-        
+
+        private void employee_inactif()
+        {
+            // ✅ استعلام محسّن باستخدام JOIN الصريح (أفضل من comma join)
+            string query = @"
+                SELECT 
+    p.matricule AS [Matricule],
+    p.nom AS [Nom],
+    p.prenom AS [Prénom],
+    p.sexe AS [Sexe],
+    p.adress AS [Adresse],
+    p.tel AS [Téléphone],
+    f.lib_fonction AS [Fonction],
+    a.lib_affect AS [Affectation],
+    p.type_agent AS [Type],
+    p.poinatge AS [Pointage],
+    p.id_fonction, 
+    p.id_affectation
+FROM Personnel p
+INNER JOIN fonction f ON p.id_fonction = f.c_fonct
+INNER JOIN affectation a ON p.id_affectation = a.c_affect
+WHERE p.type_agent = 'Bloque'
+ORDER BY p.matricule;";
+
+            // ✅ تحميل البيانات باستخدام ConnectSqlite (بدون SqlDataAdapter)
+            DataTable dt = ConnectSqlServer.ExecuteSelect(query);
+            gridControl1.DataSource = dt;
+
+            // ✅ تنسيق الشبكة (DevExpress)
+            var gridView = gridControl1.MainView as DevExpress.XtraGrid.Views.Grid.GridView;
+            if (gridView != null)
+            {
+                gridView.OptionsBehavior.Editable = false;
+                gridView.BestFitColumns();
+                gridView.OptionsView.ColumnAutoWidth = true;
+
+                gridView1.Columns[0].Width = 80; // Matricule
+
+
+                gridView1.Columns[8].Visible = false;  // إخفاء type_agent
+                gridView1.Columns[9].Visible = false;  // إخفاء poinatge
+                gridView1.Columns[10].Visible = false; // إخفاء id_fonction
+                gridView1.Columns[11].Visible = false; // إخفاء id_affectation
+            }
+        }
+
+        //private void simpleButton1_Click(object sender, EventArgs e)
+        //{
+
+        //}
+
+        private void bt_historique_Click(object sender, EventArgs e)
+        {
+            if (etat_employee == 0)
+            {
+                etat_employee = 1;
+                bt_historique.Text = "Afficher Actifs";
+                employee_inactif();
+            }
+            else
+            {
+                etat_employee = 0;
+                bt_historique.Text = "Afficher Inactifs";
+                load_personnel_data();
+            }
+        }
+
+        private void bt_exportexcel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void bt_exportpdf_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
