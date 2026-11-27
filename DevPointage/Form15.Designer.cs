@@ -30,6 +30,9 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form15));
             this.panel1 = new System.Windows.Forms.Panel();
+            this.bt_exportpdf = new DevExpress.XtraEditors.SimpleButton();
+            this.bt_exportexcel = new DevExpress.XtraEditors.SimpleButton();
+            this.bt_supprimer = new DevExpress.XtraEditors.SimpleButton();
             this.bt_fermer = new DevExpress.XtraEditors.SimpleButton();
             this.bt_enregistrer = new DevExpress.XtraEditors.SimpleButton();
             this.bt_modifier = new DevExpress.XtraEditors.SimpleButton();
@@ -61,9 +64,6 @@
             this.panel3 = new System.Windows.Forms.Panel();
             this.gridControl1 = new DevExpress.XtraGrid.GridControl();
             this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
-            this.bt_supprimer = new DevExpress.XtraEditors.SimpleButton();
-            this.bt_exportpdf = new DevExpress.XtraEditors.SimpleButton();
-            this.bt_exportexcel = new DevExpress.XtraEditors.SimpleButton();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl2)).BeginInit();
@@ -89,6 +89,51 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(161, 955);
             this.panel1.TabIndex = 0;
+            // 
+            // bt_exportpdf
+            // 
+            this.bt_exportpdf.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.bt_exportpdf.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bt_exportpdf.Appearance.Options.UseFont = true;
+            this.bt_exportpdf.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("bt_exportpdf.ImageOptions.Image")));
+            this.bt_exportpdf.ImageOptions.ImageToTextAlignment = DevExpress.XtraEditors.ImageAlignToText.TopCenter;
+            this.bt_exportpdf.Location = new System.Drawing.Point(9, 648);
+            this.bt_exportpdf.Margin = new System.Windows.Forms.Padding(4);
+            this.bt_exportpdf.Name = "bt_exportpdf";
+            this.bt_exportpdf.Size = new System.Drawing.Size(148, 77);
+            this.bt_exportpdf.TabIndex = 21;
+            this.bt_exportpdf.Text = "&Export PDF";
+            this.bt_exportpdf.Click += new System.EventHandler(this.bt_exportpdf_Click);
+            // 
+            // bt_exportexcel
+            // 
+            this.bt_exportexcel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.bt_exportexcel.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bt_exportexcel.Appearance.Options.UseFont = true;
+            this.bt_exportexcel.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("bt_exportexcel.ImageOptions.Image")));
+            this.bt_exportexcel.ImageOptions.ImageToTextAlignment = DevExpress.XtraEditors.ImageAlignToText.TopCenter;
+            this.bt_exportexcel.Location = new System.Drawing.Point(10, 559);
+            this.bt_exportexcel.Margin = new System.Windows.Forms.Padding(4);
+            this.bt_exportexcel.Name = "bt_exportexcel";
+            this.bt_exportexcel.Size = new System.Drawing.Size(147, 81);
+            this.bt_exportexcel.TabIndex = 20;
+            this.bt_exportexcel.Text = "&Export Excel";
+            this.bt_exportexcel.Click += new System.EventHandler(this.bt_exportexcel_Click);
+            // 
+            // bt_supprimer
+            // 
+            this.bt_supprimer.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.bt_supprimer.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bt_supprimer.Appearance.Options.UseFont = true;
+            this.bt_supprimer.Enabled = false;
+            this.bt_supprimer.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("bt_supprimer.ImageOptions.Image")));
+            this.bt_supprimer.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.TopCenter;
+            this.bt_supprimer.Location = new System.Drawing.Point(6, 251);
+            this.bt_supprimer.Name = "bt_supprimer";
+            this.bt_supprimer.Size = new System.Drawing.Size(148, 83);
+            this.bt_supprimer.TabIndex = 19;
+            this.bt_supprimer.Text = "Supprimer";
+            this.bt_supprimer.Click += new System.EventHandler(this.bt_supprimer_Click);
             // 
             // bt_fermer
             // 
@@ -445,51 +490,8 @@
             // 
             this.gridView1.GridControl = this.gridControl1;
             this.gridView1.Name = "gridView1";
+            this.gridView1.OptionsBehavior.Editable = false;
             this.gridView1.FocusedRowChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(this.gridView1_FocusedRowChanged);
-            // 
-            // bt_supprimer
-            // 
-            this.bt_supprimer.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.bt_supprimer.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bt_supprimer.Appearance.Options.UseFont = true;
-            this.bt_supprimer.Enabled = false;
-            this.bt_supprimer.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("bt_supprimer.ImageOptions.Image")));
-            this.bt_supprimer.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.TopCenter;
-            this.bt_supprimer.Location = new System.Drawing.Point(6, 251);
-            this.bt_supprimer.Name = "bt_supprimer";
-            this.bt_supprimer.Size = new System.Drawing.Size(148, 83);
-            this.bt_supprimer.TabIndex = 19;
-            this.bt_supprimer.Text = "Supprimer";
-            // 
-            // bt_exportpdf
-            // 
-            this.bt_exportpdf.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.bt_exportpdf.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bt_exportpdf.Appearance.Options.UseFont = true;
-            this.bt_exportpdf.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("bt_exportpdf.ImageOptions.Image")));
-            this.bt_exportpdf.ImageOptions.ImageToTextAlignment = DevExpress.XtraEditors.ImageAlignToText.TopCenter;
-            this.bt_exportpdf.Location = new System.Drawing.Point(9, 648);
-            this.bt_exportpdf.Margin = new System.Windows.Forms.Padding(4);
-            this.bt_exportpdf.Name = "bt_exportpdf";
-            this.bt_exportpdf.Size = new System.Drawing.Size(148, 77);
-            this.bt_exportpdf.TabIndex = 21;
-            this.bt_exportpdf.Text = "&Export PDF";
-            this.bt_exportpdf.Click += new System.EventHandler(this.bt_exportpdf_Click);
-            // 
-            // bt_exportexcel
-            // 
-            this.bt_exportexcel.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.bt_exportexcel.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bt_exportexcel.Appearance.Options.UseFont = true;
-            this.bt_exportexcel.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("bt_exportexcel.ImageOptions.Image")));
-            this.bt_exportexcel.ImageOptions.ImageToTextAlignment = DevExpress.XtraEditors.ImageAlignToText.TopCenter;
-            this.bt_exportexcel.Location = new System.Drawing.Point(10, 559);
-            this.bt_exportexcel.Margin = new System.Windows.Forms.Padding(4);
-            this.bt_exportexcel.Name = "bt_exportexcel";
-            this.bt_exportexcel.Size = new System.Drawing.Size(147, 81);
-            this.bt_exportexcel.TabIndex = 20;
-            this.bt_exportexcel.Text = "&Export Excel";
-            this.bt_exportexcel.Click += new System.EventHandler(this.bt_exportexcel_Click);
             // 
             // Form15
             // 

@@ -64,6 +64,7 @@ namespace DevPointage
 
             bt_ajouter.Enabled = false;
             bt_modifier.Enabled = false;
+            bt_supprimer.Enabled = false;
             bt_enregistrer.Enabled = true;
 
 
@@ -104,6 +105,16 @@ namespace DevPointage
 
         private void bt_modifier_Click(object sender, EventArgs e)
         {
+            DataRow selectedRow = gridView1.GetDataRow(gridView1.FocusedRowHandle);
+            if (selectedRow == null) return;
+
+            if (absence_cloturee(selectedRow))
+            {
+                XtraMessageBox.Show("Cette absence est clôturée : modification impossible.", "Information",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             insertion_modification = 1; // وضع التعديل
 
             // تفعيل الحقول للإدخال
@@ -123,6 +134,7 @@ namespace DevPointage
             bt_enregistrer.Enabled = true;
             bt_ajouter.Enabled = false;
             bt_modifier.Enabled = false;
+            bt_supprimer.Enabled = false;
 
             if (chk_periodique.Checked) txt_nbrABS.Focus();
             else dt_au.Focus();
@@ -142,7 +154,11 @@ namespace DevPointage
         {
             string matricule = txt_matricule.Text.Trim();
             if (string.IsNullOrEmpty(matricule)) return false;
-            string query = "SELECT nom, prenom , fonction.lib_fonction , affectation.lib_affect  FROM Personnel,fonction,affectation WHERE personnel.id_fonction=fonction.c_fonct and personnel.id_affectation=affectation.c_affect and matricule = @matricule";
+            string query = @"SELECT p.nom, p.prenom, f.lib_fonction, a.lib_affect
+                  FROM Personnel p
+                  LEFT JOIN fonction f    ON p.id_fonction = f.c_fonct
+                  LEFT JOIN affectation a ON p.id_affectation = a.c_affect
+                  WHERE p.matricule = @matricule"; 
             SqlParameter[] parameters = {
               new SqlParameter("@matricule", matricule)
                                         };
@@ -420,8 +436,7 @@ namespace DevPointage
             }
         }
 
-        // قبل (ما أرسلته في الخطوة 4، لا تطبقه)
-        //return yearMonth + nextId.ToString().PadLeft(3, '0');
+        
 
         // بعد: استبدل الدالة كاملة
         private string GetNextNumBon(string matri, DateTime date1)
@@ -598,28 +613,31 @@ namespace DevPointage
             {
                 // 1. تحويل الشهر المختار إلى رقم (Janvier = 1, etc.)
                 int month = liste_mois.SelectedIndex + 1;
-                string year = txt_annee.Text.Trim();
 
-                if (string.IsNullOrEmpty(year))
+                if (month < 1 || !int.TryParse(txt_annee.Text.Trim(), out int year) || year < 1900 || year > 2100)
                 {
-                    MessageBox.Show("Veuillez saisir l'année");
+                    XtraMessageBox.Show("Mois ou année invalide.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                // 2. الاستعلام لجلب البيانات مع اسم الموظف (Join) ليكون الجدول مفهوماً
+                DateTime debut = new DateTime(year, month, 1);
+                DateTime fin = debut.AddMonths(1).AddDays(-1);   // آخر يوم في الشهر
+
+                // نعرض كل غياب يتقاطع مع الشهر (وليس فقط ما يبدأ فيه)
                 string query = @"SELECT A.MATRI, P.NOM + ' ' + P.PRENOM AS [Nom & Prénom], 
-                               A.DATE1, A.DATE2, A.NUM_BON, A.C_CONGE, 
-                               A.JOUR, A.HEURE, A.NATURE, A.OBS
-                        FROM [ABS] A
-                        INNER JOIN [PERSONNEL] P ON A.MATRI = P.MATRICULE
-                        WHERE MONTH(A.DATE1) = @month 
-                        AND YEAR(A.DATE1) = @year
-                        ORDER BY A.DATE1 DESC, A.MATRI ASC";
+                 A.DATE1, A.DATE2, A.NUM_BON, A.C_CONGE, T.LIB AS [Conge],
+                 A.JOUR, A.HEURE, A.NATURE, A.OBS
+                 FROM [ABS] A
+                 INNER JOIN [PERSONNEL] P ON A.MATRI = P.MATRICULE
+                 LEFT JOIN [TYPE_CONGE] T ON A.C_CONGE = T.CODE
+                 WHERE A.DATE1 <= @fin 
+                 AND ISNULL(A.DATE2, A.DATE1) >= @debut
+                 ORDER BY A.DATE1 DESC, A.MATRI ASC";
 
                 SqlParameter[] parameters = {
-            new SqlParameter("@month", month),
-            new SqlParameter("@year", year)
-        };
+                 DateParam("@debut", debut),
+                 DateParam("@fin", fin)
+                };
 
                 DataTable dt = ConnectSqlServer.ExecuteSelect(query, parameters);
 
@@ -678,6 +696,7 @@ namespace DevPointage
                 bt_ajouter.Enabled = true;
                 // تفعيل زر التعديل وتعطيل الحفظ مؤقتاً
                 bt_modifier.Enabled = true;
+                bt_supprimer.Enabled = true;
                 bt_enregistrer.Enabled = false;
             }
         }
@@ -704,6 +723,7 @@ namespace DevPointage
 
             bt_ajouter.Enabled = true;
             bt_modifier.Enabled = false;
+            bt_supprimer.Enabled = false;
             bt_enregistrer.Enabled = false;
             
             // تحديث الـ GridControl لعرض البيانات الجديدة
@@ -735,6 +755,91 @@ namespace DevPointage
                 gridControl1.ExportToPdf(sd.FileName);
                 Process.Start(sd.FileName);
             }
+        }
+
+        private void bt_supprimer_Click(object sender, EventArgs e)
+        {
+            if (gridView1.FocusedRowHandle < 0)
+            {
+                XtraMessageBox.Show("Veuillez sélectionner un enregistrement à supprimer.", "Information",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            DataRow row = gridView1.GetDataRow(gridView1.FocusedRowHandle);
+            if (row == null || row["DATE1"] == DBNull.Value) return;
+
+            if (absence_cloturee(row))
+            {
+                XtraMessageBox.Show("Cette absence est clôturée : suppression impossible.", "Information",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string matri = row["MATRI"]?.ToString() ?? "";
+            string numBon = row["NUM_BON"]?.ToString() ?? "";
+            string nom = row["Nom & Prénom"]?.ToString() ?? "";
+            DateTime date1 = Convert.ToDateTime(row["DATE1"]);
+
+            if (matri == "" || numBon == "") return;
+
+            DialogResult confirm = XtraMessageBox.Show(
+                $"Voulez-vous vraiment supprimer cette absence ?\n\n" +
+                $"Employé : {matri} - {nom}\n" +
+                $"Bon : {numBon}\n" +
+                $"Date : {date1:dd/MM/yyyy}\n\n" +
+                $"Cette action est définitive.",
+                "Confirmation de suppression",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+
+            if (confirm != DialogResult.Yes) return;
+
+            string query = @"DELETE FROM [ABS] 
+             WHERE MATRI = @matri AND NUM_BON = @num_bon 
+             AND CAST(DATE1 AS date) = @date1 
+             AND UPPER(ISNULL(CLOT, 'N')) <> 'O'";
+
+            SqlParameter[] parameters = {
+        new SqlParameter("@matri", matri),
+        new SqlParameter("@num_bon", numBon),
+        DateParam("@date1", date1)
+    };
+
+            if (!ConnectSqlServer.TryExecuteNonQuery(query, parameters, out int rows, out string error))
+            {
+                XtraMessageBox.Show("Erreur lors de la suppression : " + error, "Erreur",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (rows > 0)
+            {
+                LoadAllAbsences();
+                ResetUI();
+            }
+            else
+            {
+                XtraMessageBox.Show("Enregistrement introuvable (peut-être déjà supprimé).", "Information",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoadAllAbsences();
+            }
+        }
+        private bool absence_cloturee(DataRow row)
+        {
+            if (row == null || row["DATE1"] == DBNull.Value) return false;
+
+            SqlParameter[] parameters = {
+        new SqlParameter("@matri", row["MATRI"]?.ToString() ?? ""),
+        new SqlParameter("@num_bon", row["NUM_BON"]?.ToString() ?? ""),
+        DateParam("@date1", Convert.ToDateTime(row["DATE1"]))
+            };
+
+            DataTable dt = ConnectSqlServer.ExecuteSelect(
+                @"SELECT COUNT(*) FROM [ABS] 
+          WHERE MATRI = @matri AND NUM_BON = @num_bon AND CAST(DATE1 AS date) = @date1
+          AND UPPER(ISNULL(CLOT, 'N')) = 'O'", parameters);
+
+            return dt != null && dt.Rows.Count > 0 && Convert.ToInt32(dt.Rows[0][0]) > 0;
         }
     }
 }
