@@ -25,8 +25,8 @@ namespace DevPointage
         static public int insertion_modification;
         public decimal n_jours;
         public decimal temps;
-        public Boolean vergule;
-        public char Separateur = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator[0];
+        //public Boolean vergule;
+        //public char Separateur = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator[0];
 
         // الحد الأقصى لساعات Bon Sortie في اليوم
         private const decimal MAX_HEURES_JOUR = 8m;
@@ -56,7 +56,7 @@ namespace DevPointage
             txt_matricule.Enabled = true;
             dt_du.Enabled = true;
             dt_au.Enabled = true;
-            cb_horaire.Enabled = true;
+           // cb_horaire.Enabled = true;
             chk_periodique.Enabled = true;
             cb_type.Enabled = true;
             txt_nbrABS.Enabled = false;
@@ -71,8 +71,7 @@ namespace DevPointage
             load_horaire();
             load_type_conge("N");
             chk_periodique_CheckedChanged(sender, e);
-            UpdateAbsenceDuration();
-            //LoadAllAbsences();
+            
 
             ActiveControl = txt_matricule;
 
@@ -83,24 +82,9 @@ namespace DevPointage
             Close();
         }
 
-        private void bt_apercu_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void dt_au_ValueChanged(object sender, EventArgs e)
         {
-            if (dt_au.Enabled == true)
-            {
-                n_jours = (dt_au.Value.Date - dt_du.Value.Date).Days + 1;
-                txt_nbrABS.Text = n_jours.ToString();
-                temps = 0;
-            }
-            else
-            {
-                n_jours = 0;
-            }
-            UpdateAbsenceDuration();
+            CalculateDays(true); // true: لإظهار رسالة إذا كان التاريخ غير منطقي
         }
 
         private void bt_modifier_Click(object sender, EventArgs e)
@@ -126,7 +110,7 @@ namespace DevPointage
             dt_au.Enabled = !chk_periodique.Checked;        // Congé: نعدّل تاريخ النهاية
             txt_nbrABS.Enabled = chk_periodique.Checked;    // Bon Sortie: نعدّل الساعات
 
-            cb_horaire.Enabled = true;
+            //cb_horaire.Enabled = true;
             cb_type.Enabled = true;
             txt_observation.Enabled = true;
 
@@ -175,7 +159,7 @@ namespace DevPointage
                 lb_nom_prenom.Text = "";
                 lb_nom_prenom.Visible = false;
                 if (showMessage)
-                    MessageBox.Show("المستخدم غير موجود", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    XtraMessageBox.Show("المستخدم غير موجود", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                                 return false;
             }
         }
@@ -308,6 +292,7 @@ namespace DevPointage
                 lb_nbrABS.Text = "Nbr Heurs :";
                 dt_au.Enabled = false;
                 txt_nbrABS.Enabled = true;
+                txt_nbrABS.Text = "0";      // لئلا يبقى عدد الأيام ظاهراً كأنه ساعات عند التبديل من Congé
             }
             else
             {
@@ -317,7 +302,6 @@ namespace DevPointage
                 dt_au.Enabled = true;
                 txt_nbrABS.Enabled = false;
             }
-            UpdateAbsenceDuration();
             CalculateDays();
         }
 
@@ -328,8 +312,8 @@ namespace DevPointage
             if (TryParseNbr(txt_nbrABS.Text, out decimal val))
             {
                 if (val < 0 || val > MAX_HEURES_JOUR) 
-                { 
-                    MessageBox.Show("Veuillez vérifier vos données?", "DevPointage", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                {
+                    XtraMessageBox.Show("Veuillez vérifier vos données?", "DevPointage", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     txt_nbrABS.Text = "0";
                     txt_nbrABS.Focus(); // أفضل من ActiveControl في هذه الحالة
                     temps = 0;
@@ -348,22 +332,29 @@ namespace DevPointage
         }
 
         // دالة محسنة للتحقق من التواريخ وحساب الأيام
-        private void CalculateDays()
+        private void CalculateDays(bool showMessage = false)
         {
-            if (dt_au.Enabled)
+            if (!chk_periodique.Checked)   // Congé: الأيام تُحسب من التاريخين
             {
                 if (dt_au.Value.Date < dt_du.Value.Date)
                 {
-                    // منع اختيار تاريخ نهاية قبل تاريخ البداية
-                    dt_au.Value = dt_du.Value;
+                    if (showMessage)
+                        XtraMessageBox.Show("تاريخ النهاية لا يمكن أن يكون أصغر من تاريخ البداية",
+                                            "خطأ في التاريخ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                    dt_au.Value = dt_du.Value;   // يُطلق dt_au_ValueChanged فيعيد الحساب
+                    return;
                 }
+
                 n_jours = (dt_au.Value.Date - dt_du.Value.Date).Days + 1;
                 txt_nbrABS.Text = n_jours.ToString();
+                temps = 0;
             }
-            else { 
+            else                            // Bon Sortie: الساعات يدخلها المستخدم، لا نلمس txt_nbrABS
+            {
                 n_jours = 0;
-                txt_nbrABS.Text = "0";
-                dt_au.Value = dt_du.Value; // تأكد من أن تاريخ النهاية يساوي تاريخ البداية في حالة Bon Sortie
+                if (dt_au.Value.Date != dt_du.Value.Date)
+                    dt_au.Value = dt_du.Value;   // تاريخ النهاية = تاريخ البداية
             }
         }
 
@@ -382,12 +373,12 @@ namespace DevPointage
             }
             else
             {
-                cb_horaire.SelectedValue = code.Trim();
+                cb_horaire.SelectedValue = code;
                 bt_enregistrer.Enabled = true; // تفعيل الحفظ عند التأكد من وجود جدول توقيت
             }
 
             CalculateDays();
-            UpdateAbsenceDuration();
+            
         }
 
         private string get_personnel_emploi_code(string matricule, DateTime date_jr)
@@ -416,7 +407,7 @@ namespace DevPointage
             {
                 if (dt_au.Value.Date < dt_du.Value.Date)
                 {
-                    MessageBox.Show("تاريخ النهاية لا يمكن أن يكون أصغر من تاريخ البداية",
+                    XtraMessageBox.Show("تاريخ النهاية لا يمكن أن يكون أصغر من تاريخ البداية",
                                     "خطأ في التاريخ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     // تصحيح التاريخ تلقائياً
@@ -438,7 +429,7 @@ namespace DevPointage
 
         
 
-        // بعد: استبدل الدالة كاملة
+        
         private string GetNextNumBon(string matri, DateTime date1)
         {
             string query = "SELECT NUM_BON FROM [ABS] WHERE MATRI = @matri AND DATE1 = @date1";
@@ -643,7 +634,13 @@ namespace DevPointage
 
                 // 3. ربط النتيجة بالـ Grid
                 gridControl1.DataSource = dt;
-               // dataGridView1.DataSource = dt; // إذا كنت تستخدم DataGridView أيضاً
+
+                var h = gridView1.Columns["HEURE"];
+                if (h != null)
+                {
+                    h.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+                    h.DisplayFormat.FormatString = "0.##";     // 1.00 ← 1  |  1.50 ← 1,5
+                }
 
                 // تحسين مظهر الأعمدة في DevExpress (اختياري)
                 gridView1.BestFitColumns();
@@ -679,7 +676,9 @@ namespace DevPointage
                 if (row["NATURE"].ToString() == "S") // "S" تعني Sortie/ساعات
                 {
                     chk_periodique.Checked = true;
-                    txt_nbrABS.Text = row["HEURE"].ToString();
+                    txt_nbrABS.Text = row["HEURE"] == DBNull.Value
+                    ? "0"
+                    : Convert.ToDecimal(row["HEURE"]).ToString("0.##");
                     dt_au.Enabled = false;
                 }
                 else // "C" تعني Congé/أيام
@@ -692,6 +691,9 @@ namespace DevPointage
 
                 cb_type.SelectedValue = row["C_CONGE"].ToString();
                 txt_observation.Text = row["OBS"].ToString();
+
+                dt_au.Enabled = false;
+                txt_nbrABS.Enabled = false;
 
                 bt_ajouter.Enabled = true;
                 // تفعيل زر التعديل وتعطيل الحفظ مؤقتاً
