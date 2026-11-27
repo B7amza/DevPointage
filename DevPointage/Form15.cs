@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Globalization;
 
 namespace DevPointage
 {
@@ -26,6 +27,14 @@ namespace DevPointage
         public decimal temps;
         public Boolean vergule;
         public char Separateur = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator[0];
+
+        // الحد الأقصى لساعات Bon Sortie في اليوم
+        private const decimal MAX_HEURES_JOUR = 8m;
+
+        // قراءة رقم يقبل الفاصلة والنقطة بغض النظر عن لغة النظام
+        private static bool TryParseNbr(string s, out decimal v) =>
+            decimal.TryParse((s ?? "").Trim().Replace(',', '.'),
+                             NumberStyles.Number, CultureInfo.InvariantCulture, out v);
 
         private void bt_ajouter_Click(object sender, EventArgs e)
         {
@@ -59,7 +68,7 @@ namespace DevPointage
             load_type_conge("N");
             chk_periodique_CheckedChanged(sender, e);
             UpdateAbsenceDuration();
-            LoadAllAbsences();
+            //LoadAllAbsences();
 
             ActiveControl = txt_matricule;
 
@@ -99,19 +108,21 @@ namespace DevPointage
             dt_du.Enabled = false;        // تاريخ البداية أيضاً جزء من المفتاح الأساسي
 
             // إذا كان إجازة، نفعّل تاريخ النهاية
-            dt_au.Enabled = !chk_periodique.Checked;
+            chk_periodique.Enabled = false;                 // لا تحويل بين النوعين أثناء التعديل
+            dt_au.Enabled = !chk_periodique.Checked;        // Congé: نعدّل تاريخ النهاية
+            txt_nbrABS.Enabled = chk_periodique.Checked;    // Bon Sortie: نعدّل الساعات
 
             cb_horaire.Enabled = true;
             cb_type.Enabled = true;
-            txt_nbrABS.Enabled = true;
             txt_observation.Enabled = true;
 
             // تفعيل أزرار التحكم
             bt_enregistrer.Enabled = true;
             bt_ajouter.Enabled = false;
-            bt_modifier.Enabled = false;    
+            bt_modifier.Enabled = false;
 
-            txt_nbrABS.Focus();
+            if (chk_periodique.Checked) txt_nbrABS.Focus();
+            else dt_au.Focus();
         }
 
         private void Form15_Load(object sender, EventArgs e)
@@ -124,10 +135,10 @@ namespace DevPointage
             ResetUI();
         }
 
-        private void load_personnel_details()
+        private bool load_personnel_details(bool showMessage = true)
         {
             string matricule = txt_matricule.Text.Trim();
-            if (string.IsNullOrEmpty(matricule)) return;
+            if (string.IsNullOrEmpty(matricule)) return false;
             string query = "SELECT nom, prenom , fonction.lib_fonction , affectation.lib_affect  FROM Personnel,fonction,affectation WHERE personnel.id_fonction=fonction.c_fonct and personnel.id_affectation=affectation.c_affect and matricule = @matricule";
             SqlParameter[] parameters = {
               new SqlParameter("@matricule", matricule)
@@ -138,14 +149,15 @@ namespace DevPointage
                 DataRow row = dt.Rows[0];
                 lb_nom_prenom.Text = row["nom"].ToString() + " " + row["prenom"].ToString();
                 lb_nom_prenom.Visible = true;
-
+                return true;
             }
             else
             {
                 lb_nom_prenom.Text = "";
                 lb_nom_prenom.Visible = false;
-                MessageBox.Show("المستخدم غير موجود", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
+                if (showMessage)
+                    MessageBox.Show("المستخدم غير موجود", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                return false;
             }
         }
 
@@ -154,10 +166,8 @@ namespace DevPointage
             // 1. التحقق من ضغط زر Enter
             if (e.KeyCode == Keys.Enter)
             {
-
-                // 2. منادات الداله txt_matricule_Leave
-                txt_matricule_Leave(sender, e);
-
+                e.SuppressKeyPress = true;                       // يمنع صوت "ding"
+                SelectNextControl((Control)sender, true, true, true, true); // ننتقل للحقل التالي، و Leave يتحقق مرة واحدة
             }
         }
 
@@ -226,10 +236,12 @@ namespace DevPointage
 
         private void txt_nbrABS_Leave(object sender, EventArgs e)
         {
-            if (decimal.TryParse(txt_nbrABS.Text, out decimal val))
+            if (!chk_periodique.Checked) return;      // الحد الأقصى يخص Bon Sortie فقط
+
+            if (TryParseNbr(txt_nbrABS.Text, out decimal val))
             {
-                if (val < 0 || val > 8)
-                {
+                if (val < 0 || val > MAX_HEURES_JOUR) 
+                { 
                     MessageBox.Show("Veuillez vérifier vos données?", "DevPointage", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     txt_nbrABS.Text = "0";
                     txt_nbrABS.Focus(); // أفضل من ActiveControl في هذه الحالة
@@ -469,7 +481,7 @@ namespace DevPointage
 
                 txt_matricule.Text = row["MATRI"].ToString();
                 // استدعاء دالة جلب الاسم التي برمجناها سابقاً
-                load_personnel_details();
+                load_personnel_details(false);
 
                 dt_du.Value = Convert.ToDateTime(row["DATE1"]);
 
@@ -514,6 +526,7 @@ namespace DevPointage
             dt_au.Enabled = false;
             cb_horaire.Enabled = false;
             cb_type.Enabled = false;
+            chk_periodique.Enabled = false;
             txt_nbrABS.Enabled = false;
             txt_observation.Enabled = false;
 
