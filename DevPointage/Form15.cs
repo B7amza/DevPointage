@@ -36,6 +36,9 @@ namespace DevPointage
             decimal.TryParse((s ?? "").Trim().Replace(',', '.'),
                              NumberStyles.Number, CultureInfo.InvariantCulture, out v);
 
+        private static SqlParameter DateParam(string name, DateTime value) =>
+            new SqlParameter(name, SqlDbType.Date) { Value = value.Date };
+
         private void bt_ajouter_Click(object sender, EventArgs e)
         {
             insertion_modification = 0;
@@ -212,6 +215,74 @@ namespace DevPointage
 
         }
 
+        private bool existe_absence(string matricule, DateTime date_debut, DateTime date_fin,
+                            string nature, string num_bon_actuel = "")
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(matricule)) return false;
+
+                string query = @"SELECT COUNT(*) FROM [ABS] 
+            WHERE MATRI = @matri 
+            AND CAST(DATE1 AS date) <= @d_fin 
+            AND CAST(CASE WHEN NATURE = 'S' THEN DATE1 
+                          ELSE ISNULL(DATE2, DATE1) END AS date) >= @d_debut
+            AND NOT (@nature = 'S' AND ISNULL(NATURE, 'C') = 'S')";
+
+                var parameters = new List<SqlParameter>
+        {
+            new SqlParameter("@matri", matricule),
+            DateParam("@d_debut", date_debut),
+            DateParam("@d_fin", date_fin),
+            new SqlParameter("@nature", nature)
+        };
+
+                // في التعديل نستثني السجل الحالي نفسه
+                if (!string.IsNullOrEmpty(num_bon_actuel))
+                {
+                    query += " AND NOT (NUM_BON = @num_bon AND CAST(DATE1 AS date) = @d_debut)";
+                    parameters.Add(new SqlParameter("@num_bon", num_bon_actuel));
+                }
+
+                DataTable dt = ConnectSqlServer.ExecuteSelect(query, parameters.ToArray());
+
+                if (dt != null && dt.Rows.Count > 0)
+                    return Convert.ToInt32(dt.Rows[0][0]) > 0;
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                XtraMessageBox.Show("خطأ في فحص التداخل: " + ex.Message);
+                return false;
+            }
+        }
+
+        private decimal heures_deja_prises(string matricule, DateTime jour, string numBonActuel)
+        {
+            string query = @"SELECT ISNULL(SUM(HEURE), 0) FROM [ABS] 
+             WHERE MATRI = @matri AND NATURE = 'S' 
+             AND CAST(DATE1 AS date) = @jour";
+
+            var parameters = new List<SqlParameter>
+    {
+        new SqlParameter("@matri", matricule),
+        DateParam("@jour", jour)
+    };
+
+            if (!string.IsNullOrEmpty(numBonActuel))
+            {
+                query += " AND NUM_BON <> @num_bon";   // عند التعديل لا نحسب البون نفسه
+                parameters.Add(new SqlParameter("@num_bon", numBonActuel));
+            }
+
+            DataTable dt = ConnectSqlServer.ExecuteSelect(query, parameters.ToArray());
+
+            if (dt != null && dt.Rows.Count > 0 && dt.Rows[0][0] != DBNull.Value)
+                return Math.Round(Convert.ToDecimal(dt.Rows[0][0]), 2);
+
+            return 0m;
+        }
         private void chk_periodique_CheckedChanged(object sender, EventArgs e)
         {
             if (chk_periodique.Checked)
@@ -349,36 +420,124 @@ namespace DevPointage
             }
         }
 
+        // قبل (ما أرسلته في الخطوة 4، لا تطبقه)
+        //return yearMonth + nextId.ToString().PadLeft(3, '0');
+
+        // بعد: استبدل الدالة كاملة
         private string GetNextNumBon(string matri, DateTime date1)
         {
-            string query = "SELECT ISNULL(MAX(CAST(NUM_BON AS INT)), 0) + 1 FROM [ABS] WHERE MATRI = @matri AND DATE1 = @date1";
+            string query = "SELECT NUM_BON FROM [ABS] WHERE MATRI = @matri AND DATE1 = @date1";
 
             SqlParameter[] parameters = {
         new SqlParameter("@matri", matri),
-        new SqlParameter("@date1", date1.Date)
+        DateParam("@date1", date1)
     };
 
             DataTable dt = ConnectSqlServer.ExecuteSelect(query, parameters);
-            return dt.Rows[0][0].ToString();
+
+            var utilises = new HashSet<string>();
+            foreach (DataRow r in dt.Rows)
+                utilises.Add(r["NUM_BON"].ToString().Trim());
+
+            for (int i = 1; i <= 9; i++)
+                if (!utilises.Contains(i.ToString()))
+                    return i.ToString();
+
+            return "";   // الأرقام 1..9 كلها مستعملة
         }
 
         private void bt_enregistrer_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(txt_matricule.Text) || cb_type.SelectedValue == null)
+            string matricule = txt_matricule.Text.Trim();
+
+            // 1) الحقول الإلزامية
+            if (string.IsNullOrEmpty(matricule) || cb_type.SelectedValue == null)
             {
-                MessageBox.Show("Veuillez remplir les champs obligatoires", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                XtraMessageBox.Show("Veuillez remplir les champs obligatoires", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
+            // 2) الموظف موجود فعلاً
+            if (!load_personnel_details(false))
+            {
+                XtraMessageBox.Show("Matricule invalide. Veuillez vérifier.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txt_matricule.Focus();
+                return;
+            }
+
+            bool bonSortie = chk_periodique.Checked;
+            DateTime du = dt_du.Value.Date;
+            DateTime au = bonSortie ? du : dt_au.Value.Date;
+            string nature = bonSortie ? "S" : "C";
+
+            // 3) منطقية التواريخ
+            if (au < du)
+            {
+                XtraMessageBox.Show("تاريخ النهاية لا يمكن أن يسبق تاريخ البداية.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // 4) عدد الأيام / الساعات
+            if (!TryParseNbr(txt_nbrABS.Text, out decimal nbr) || nbr <= 0)
+            {
+                XtraMessageBox.Show(bonSortie ? "Veuillez saisir le nombre d'heures." : "Nombre de jours invalide.",
+                                    "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (txt_nbrABS.Enabled) txt_nbrABS.Focus();
+                return;
+            }
+
+            // 5) في التعديل: رقم البون من الصف المحدد
+            string numBonActuel = "";
+            if (insertion_modification != 0)
+            {
+                if (gridView1.FocusedRowHandle < 0)
+                {
+                    XtraMessageBox.Show("Veuillez sélectionner un enregistrement à modifier.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                numBonActuel = gridView1.GetFocusedRowCellValue("NUM_BON")?.ToString() ?? "";
+            }
+
+            // 6) التداخل مع غياب آخر
+            if (existe_absence(matricule, du, au, nature, numBonActuel))
+            {
+                XtraMessageBox.Show("عذراً، يوجد تداخل مع غياب آخر مسجل لهذا الموظف!", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // 7) الحد الأقصى اليومي لساعات Bon Sortie
+            if (bonSortie)
+            {
+                decimal deja = heures_deja_prises(matricule, du, numBonActuel);
+                if (deja + nbr > MAX_HEURES_JOUR)
+                {
+                    decimal reste = Math.Max(0m, MAX_HEURES_JOUR - deja);
+                    XtraMessageBox.Show(
+                        $"Dépassement du maximum journalier ({MAX_HEURES_JOUR} h).\n\n" +
+                        $"Déjà enregistré ce jour : {deja} h\n" +
+                        $"Reste disponible : {reste} h",
+                        "Attention", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txt_nbrABS.Focus();
+                    return;
+                }
+            }
+
+            // 8) الحفظ
             try
             {
                 string numBon;
-                string query = "";
+                string query;
 
                 if (insertion_modification == 0) // إضافة
                 {
-                    // توليد الرقم التالي تلقائياً
-                    numBon = GetNextNumBon(txt_matricule.Text.Trim(), dt_du.Value);
+                    numBon = GetNextNumBon(matricule, du);
+
+                    if (numBon == "")
+                    {
+                        XtraMessageBox.Show("Maximum atteint : 9 bons par employé et par jour.", "Attention",
+                                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
 
                     query = @"INSERT INTO [ABS] 
                       (MATRI, C_CONGE, DATE1, DATE2, JOUR, HEURE, NATURE, OBS, NUM_BON, CLOT) 
@@ -387,37 +546,50 @@ namespace DevPointage
                 }
                 else // تعديل
                 {
-                    // في التعديل نأخذ الرقم الموجود في الصف المختار من الـ Grid
-                    numBon = gridView1.GetFocusedRowCellValue("NUM_BON").ToString();
+                    numBon = numBonActuel;
 
                     query = @"UPDATE [ABS] SET 
                       C_CONGE=@c_conge, DATE2=@date2, JOUR=@jour, HEURE=@heure, 
                       NATURE=@nature, OBS=@obs 
-                      WHERE MATRI=@matri AND DATE1=@date1 AND NUM_BON=@num_bon";
+                      WHERE MATRI=@matri AND CAST(DATE1 AS date)=@date1 AND NUM_BON=@num_bon
+                      AND UPPER(ISNULL(CLOT,'N')) <> 'O'";
                 }
 
                 SqlParameter[] parameters = {
-            new SqlParameter("@matri", txt_matricule.Text.Trim()),
+            new SqlParameter("@matri", matricule),
             new SqlParameter("@c_conge", cb_type.SelectedValue.ToString()),
-            new SqlParameter("@date1", dt_du.Value.Date),
-            new SqlParameter("@date2", chk_periodique.Checked ? (object)DBNull.Value : dt_au.Value.Date),
-            new SqlParameter("@jour", chk_periodique.Checked ? 0 : Convert.ToDecimal(txt_nbrABS.Text)),
-            new SqlParameter("@heure", chk_periodique.Checked ? Convert.ToDecimal(txt_nbrABS.Text) : 0),
-            new SqlParameter("@nature", chk_periodique.Checked ? "S" : "C"),
+            DateParam("@date1", du),
+            DateParam("@date2", au),     // Bon Sortie: DATE2 = DATE1 وليس NULL
+            new SqlParameter("@jour", bonSortie ? 0m : nbr),
+            new SqlParameter("@heure", bonSortie ? nbr : 0m),
+            new SqlParameter("@nature", nature),
             new SqlParameter("@obs", txt_observation.Text.Trim()),
             new SqlParameter("@num_bon", numBon)
         };
 
-                ConnectSqlServer.ExecuteNonQuery(query, parameters);
-                MessageBox.Show($"Enregistré avec succès ! Numéro de bon: {numBon}", "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (!ConnectSqlServer.TryExecuteNonQuery(query, parameters, out int rows, out string error))
+                {
+                    XtraMessageBox.Show("Erreur lors de l'enregistrement : " + error, "Erreur",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
-                // تحديث الجدول بعد الحفظ
-                LoadAllAbsences();
-                ResetUI();
+                if (rows > 0)
+                {
+                    XtraMessageBox.Show($"Enregistré avec succès ! Numéro de bon: {numBon}", "Succès",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadAllAbsences();
+                    ResetUI();
+                }
+                else
+                {
+                    XtraMessageBox.Show("Aucune ligne n'a été enregistrée (enregistrement introuvable ou clôturé).", "Information",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erreur: " + ex.Message);
+                XtraMessageBox.Show("Erreur: " + ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void LoadAllAbsences()

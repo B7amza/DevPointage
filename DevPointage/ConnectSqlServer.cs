@@ -127,6 +127,43 @@ namespace DevPointage
             return rows;
         }
 
+        public static bool TryExecuteNonQuery(string query, SqlParameter[] parameters,
+                                      out int rows, out string error)
+        {
+            rows = 0;
+            error = null;
+            try
+            {
+                if (!OpenConnection())
+                {
+                    error = "Connexion à la base de données impossible.";
+                    return false;
+                }
+
+                using (SqlCommand cmd = new SqlCommand(query, myConn))
+                {
+                    if (parameters != null)
+                        cmd.Parameters.AddRange(parameters);
+
+                    rows = cmd.ExecuteNonQuery();
+                }
+                return true;
+            }
+            catch (SqlException ex) when (ex.Number == 2627 || ex.Number == 2601) // مفتاح مكرر
+            {
+                error = "Cet enregistrement existe déjà (numéro de bon en double). Veuillez réessayer.";
+                return false;
+            }
+            catch (Exception ex)
+            {
+                error = ex.Message;
+                return false;
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
         // -------------------------
         // حفظ بيانات الاتصال
         // -------------------------
