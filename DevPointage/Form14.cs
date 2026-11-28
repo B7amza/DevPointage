@@ -75,8 +75,8 @@ namespace DevPointage
             if (e.KeyCode == Keys.Enter)
             {
 
-                // 2. منادات الداله txt_matricule_Leave
-                txt_matricule_Leave(sender, e);
+                e.SuppressKeyPress = true;   // بدون صوت التنبيه
+                bt_apercu.Focus();
 
             }
         }
@@ -171,6 +171,14 @@ namespace DevPointage
         }
         private void chargement_donnee_pointage_mensuelle(string matri)
         {
+            if (liste_mois.SelectedIndex == -1 ||
+        !int.TryParse(txt_annee.Text.Trim(), out int annee) || annee < 1900 || annee > 2100)
+            {
+                XtraMessageBox.Show("Mois ou année invalide.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            int mois = liste_mois.SelectedIndex + 1;
+
             Vue_Pointage_mensuelle(matri);
 
             ///////////////////////
@@ -192,61 +200,13 @@ namespace DevPointage
             {
                 entet2.RowCount++;
                 entet2.Rows[i - 1].Cells[1].Value = i.ToString();
-                //DateTime d_jour = Convert.ToDateTime(i.ToString("00") + "/" + (liste_mois.SelectedIndex + 1).ToString("00") + "/" + txt_annee.Text);
-                ////charger l'emploi des temps
-                ////horaire_trv.SelectedValue = pERSONNEL_EMPLOI_TEMPSTableAdapter.par_matri_date(d_jour, matri).ToString();
-                //horaire_trv = get_personnel_emploi_code(txt_matricule.Text,d_jour).ToString();
-                //entet2.Rows[i - 1].Cells[0].Value = get_personnel_emploi_code(txt_matricule.Text, d_jour).ToString().Trim();
-                //string s_horaire = "";
-                ////DataTable dt_horaire = get_horaire_travail(horaire_trv);
-                ////DataRow row_h = dt_horaire.Rows[0];
-
-                //if (d_jour.DayOfWeek.ToString() == Day.Friday.ToString())
-                //{
-                //    s_horaire = get_horaire_travail(horaire_trv).Rows[0]["VEN"].ToString();
-                //    entet2.Rows[i - 1].DefaultCellStyle.BackColor = SystemColors.ActiveBorder;
-
-                //}
-                //if (d_jour.DayOfWeek.ToString() == Day.Monday.ToString())
-                //{
-                //    s_horaire = get_horaire_travail(horaire_trv).Rows[0]["LUN"].ToString();
-                //}
-
-                //if (d_jour.DayOfWeek.ToString() == Day.Saturday.ToString())
-                //{
-                //    s_horaire = get_horaire_travail(horaire_trv).Rows[0]["SAM"].ToString();
-                //    entet2.Rows[i - 1].DefaultCellStyle.BackColor = SystemColors.ActiveBorder;
-                //}
-                //if (d_jour.DayOfWeek.ToString() == Day.Tuesday.ToString())
-                //{
-                //    s_horaire = get_horaire_travail(horaire_trv).Rows[0]["MAR"].ToString();
-                //}
-
-                //if (d_jour.DayOfWeek.ToString() == Day.Wednesday.ToString())
-                //{
-                //    s_horaire = get_horaire_travail(horaire_trv).Rows[0]["MER"].ToString();
-                //}
-
-                //if (d_jour.DayOfWeek.ToString() == Day.Thursday.ToString())
-                //{
-                //    s_horaire = get_horaire_travail(horaire_trv).Rows[0]["JEU"].ToString();
-                //}
-
-                //if (d_jour.DayOfWeek.ToString() == Day.Sunday.ToString())
-                //{
-
-                //    s_horaire = get_horaire_travail(horaire_trv).Rows[0]["DIM"].ToString();
-                //}
-                //string[] partie = s_horaire.Split('-');
-                //entet2.Rows[i - 1].Cells[3].Value = partie[0];
-                //entet2.Rows[i - 1].Cells[7].Value = partie[1];
-                //hr_entree = TimeSpan.Parse(partie[0]);
-                //hr_sortie = TimeSpan.Parse(partie[1]);
+                
 
                 ///////
                 ///2 em methode/////
                 ///
-                DateTime d_jour = Convert.ToDateTime(i.ToString("00") + "/" + (liste_mois.SelectedIndex + 1).ToString("00") + "/" + txt_annee.Text);
+                //DateTime d_jour = Convert.ToDateTime(i.ToString("00") + "/" + (liste_mois.SelectedIndex + 1).ToString("00") + "/" + txt_annee.Text);
+                DateTime d_jour = new DateTime(annee, mois, i);
 
                 // جلب كود جدول المواعيد
                 var result = get_personnel_emploi_code(txt_matricule.Text, d_jour);
@@ -255,6 +215,7 @@ namespace DevPointage
                 if (result == null || string.IsNullOrWhiteSpace(result.ToString()))
                 {
                     entet2.Rows[i - 1].Cells[0].Value = "غير محدد";
+                    entet2.Rows[i - 1].DefaultCellStyle.BackColor = Color.LightGray;
                     continue; // يتجاوز هذا اليوم وينتقل لليوم i+1 لتجنب الخطأ
                 }
 
@@ -300,19 +261,25 @@ namespace DevPointage
                 }
 
                 // التحقق من أن s_horaire يحتوي على الفاصلة '-' قبل عمل Split
+                hr_entree = TimeSpan.Zero;
+                hr_sortie = TimeSpan.Zero;
+
                 if (!string.IsNullOrEmpty(s_horaire) && s_horaire.Contains("-"))
                 {
                     string[] partie = s_horaire.Split('-');
-                    entet2.Rows[i - 1].Cells[3].Value = partie[0];
-                    entet2.Rows[i - 1].Cells[7].Value = partie[1];
-                    hr_entree = TimeSpan.Parse(partie[0]);
-                    hr_sortie = TimeSpan.Parse(partie[1]);
-                }
-                else
-                {
-                    // تعيين قيم افتراضية في حال عدم وجود توقيت لهذا اليوم
-                    hr_entree = TimeSpan.Zero;
-                    hr_sortie = TimeSpan.Zero;
+                    if (partie.Length >= 2)
+                    {
+                        if (TimeSpan.TryParse(partie[0].Trim(), out TimeSpan parsedEntree))
+                        {
+                            hr_entree = parsedEntree;
+                            entet2.Rows[i - 1].Cells[3].Value = partie[0].Trim();
+                        }
+                        if (TimeSpan.TryParse(partie[1].Trim(), out TimeSpan parsedSortie))
+                        {
+                            hr_sortie = parsedSortie;
+                            entet2.Rows[i - 1].Cells[7].Value = partie[1].Trim();
+                        }
+                    }
                 }
                 //////////Fin 2em methode
 
@@ -329,60 +296,53 @@ namespace DevPointage
                 //chargemenT_POITEUSETableAdapter1.par_matricule(cRM.CHARGEMENT_POITEUSE, matri, d_jour);
                 //hb////
                 // 1. تعريف الجدول خارجاً
-                DataTable dtJ = new DataTable();
                 int nbr_poitage = 0;
+                DataTable dtJ = chargement_pointage_journaliere(matri, d_jour, ref nbr_poitage);
 
-                // 2. تمرير المتغير للدالة
-                chargement_pointage_journaliere(matri, d_jour, nbr_poitage, dtJ);
+                position = 5;                // الخانتان 5 و 6 فقط للتمريرات الوسطية
+                bool entreeFaite = false;
 
-                // 3. الآن يمكنك الوصول للبيانات الموجودة في dtJ هنا بكل سهولة
-                if (dtJ.Rows.Count > 0)
+                foreach (DataRow pr in dtJ.Rows)
                 {
-                    //entet2.Rows[i - 1].Cells[2].Value = dtJ.Rows[0][3].ToString();
-                    nbr_poitage =Convert.ToInt32(dtJ.Rows[0][0].ToString());
-                }
-                //int nbr_poitage = chargemenT_POITEUSETableAdapter1.GetDataBy2(matri, d_jour).Count;
-                position = 5;
+                    if (!TimeSpan.TryParse(pr["heurs_pointage"]?.ToString()?.Trim(), out hr_pointage))
+                        continue;
 
-                for (int j = 0; j < nbr_poitage; j++)
-                {
-
-                    hr_pointage = TimeSpan.Parse(dtJ.Rows[j]["heurs_pointage"].ToString());
-
-                    //1er pointgae entree
                     if (hr_pointage <= hr_entree)
-                        entet2.Rows[i - 1].Cells[2].Value = hr_pointage;
-                    else
-                        //2eme pointage sortie
-                        if (hr_pointage >= hr_sortie)
                     {
-                        entet2.Rows[i - 1].Cells[8].Value = hr_pointage;
-                        if ((hr_pointage - hr_sortie).Minutes >= Form2.plage_hrs)
+                        // دخول في الوقت أو قبله: نحتفظ بأول تمريرة فقط
+                        if (!entreeFaite)
                         {
-                            //heurs sup
-                            entet2.Rows[i - 1].Cells[9].Value = TimeSpan.FromMinutes((hr_pointage.TotalMinutes - hr_sortie.TotalMinutes)).ToString();
+                            entet2.Rows[i - 1].Cells[2].Value = hr_pointage.ToString(@"hh\:mm");
+                            entreeFaite = true;
                         }
                     }
-
-                    else
-
-                                if ((hr_pointage >= hr_entree) & (hr_pointage <= hr_sortie))
+                    else if (hr_sortie > TimeSpan.Zero && hr_pointage >= hr_sortie)
                     {
+                        // خروج: آخر تمريرة هي التي تبقى
+                        entet2.Rows[i - 1].Cells[8].Value = hr_pointage.ToString(@"hh\:mm");
 
-                        if ((hr_pointage - hr_entree).TotalMinutes <= Form2.plage_retards)
+                        double extra = (hr_pointage - hr_sortie).TotalMinutes;
+                        entet2.Rows[i - 1].Cells[9].Value = extra >= Form2.plage_hrs
+                            ? TimeSpan.FromMinutes(extra).ToString(@"hh\:mm")
+                            : null;
+                    }
+                    else if (hr_entree > TimeSpan.Zero)
+                    {
+                        // بين الدخول والخروج
+                        double retard = (hr_pointage - hr_entree).TotalMinutes;
+
+                        if (!entreeFaite && retard <= Form2.plage_retards)
                         {
-                            //3eme pointage entree retard
-                            entet2.Rows[i - 1].Cells[2].Value = hr_pointage;
-                            entet2.Rows[i - 1].Cells[4].Value = (hr_pointage - hr_entree).TotalMinutes.ToString();
+                            entet2.Rows[i - 1].Cells[2].Value = hr_pointage.ToString(@"hh\:mm");
+                            entet2.Rows[i - 1].Cells[4].Value = retard.ToString("0");
+                            entreeFaite = true;
                         }
-                        else
+                        else if (position <= 6)
                         {
-                            //recherche bon_sortie                                            
-                            entet2.Rows[i - 1].Cells[position].Value = hr_pointage;
+                            entet2.Rows[i - 1].Cells[position].Value = hr_pointage.ToString(@"hh\:mm");
                             position++;
                         }
                     }
-
                 }
                 //////////////************************HB*************************//////////////////////
                 ///
@@ -400,134 +360,11 @@ namespace DevPointage
                     }
 
                 ///*********************************************************************************************************/
-                //if (etat_pointage_mensuelleTableAdapter.GetData(matri, d_jour).Count > 0)
-                //{
-                //    entet2.Rows[i - 1].Cells[10].Value = etat_pointage_mensuelleTableAdapter.GetData(matri, d_jour).Rows[0]["LIB"].ToString();
-                //}
-                //if (entet2.Rows[i - 1].Cells[8].Value != null)
-                //{
-                //    //entet2.Rows[i - 1].Cells[12].Value = "0";
-                //    //entet2.Rows[i - 1].Cells[13].Value="0";
-                //    //entet2.Rows[i - 1].Cells[12].Value = "0";
-                //    TimeSpan s;
-                //    s = TimeSpan.Parse(entet2.Rows[i - 1].Cells[8].Value.ToString());
-
-                //    TimeSpan e;
-                //    if (entet2.Rows[i - 1].Cells[2].Value != null)
-                //    {
-                //        e = TimeSpan.Parse(entet2.Rows[i - 1].Cells[2].Value.ToString());
-                //        entet2.Rows[i - 1].Cells[12].Value = Math.Round((s - e).TotalHours, 2).ToString();
-                //        entet2.Rows[i - 1].Cells[13].Value = personnelTableAdapter1.GetDataBy19(matricule.Text).Rows[0]["NUM_CPT"].ToString();
-                //        entet2.Rows[i - 1].Cells[14].Value = Convert.ToDecimal(entet2.Rows[i - 1].Cells[12].Value) * Convert.ToDecimal(entet2.Rows[i - 1].Cells[13].Value);
-                //    }
-                //    else
-                //    {
-                //        if (entet2.Rows[i - 1].Cells[5].Value != null)
-                //        {
-                //            e = TimeSpan.Parse(entet2.Rows[i - 1].Cells[5].Value.ToString());
-
-                //            entet2.Rows[i - 1].Cells[12].Value = Math.Round((s - e).TotalHours, 2).ToString();
-                //            entet2.Rows[i - 1].Cells[13].Value = personnelTableAdapter1.GetDataBy19(matricule.Text).Rows[0]["NUM_CPT"].ToString();
-                //            entet2.Rows[i - 1].Cells[14].Value = Convert.ToDecimal(entet2.Rows[i - 1].Cells[12].Value) * Convert.ToDecimal(entet2.Rows[i - 1].Cells[13].Value);
-                //        }
-                //        else
-                //        {
-                //            entet2.Rows[i - 1].Cells[12].Value = "0";
-                //            entet2.Rows[i - 1].Cells[13].Value = personnelTableAdapter1.GetDataBy19(matricule.Text).Rows[0]["NUM_CPT"].ToString();
-                //            entet2.Rows[i - 1].Cells[14].Value = Convert.ToDecimal(entet2.Rows[i - 1].Cells[12].Value) * Convert.ToDecimal(entet2.Rows[i - 1].Cells[13].Value);
-                //        }
-
-                //    }
-
-
-                //}
-                //else  // modificaion hamza du 02/12/2023
-                //{
-                //    if (entet2.Rows[i - 1].Cells[6].Value != null)
-                //    {
-                //        TimeSpan s;
-                //        s = TimeSpan.Parse(entet2.Rows[i - 1].Cells[6].Value.ToString());
-
-                //        TimeSpan e;
-                //        if (entet2.Rows[i - 1].Cells[2].Value != null)
-                //        {
-                //            e = TimeSpan.Parse(entet2.Rows[i - 1].Cells[2].Value.ToString());
-                //            entet2.Rows[i - 1].Cells[12].Value = Math.Round((s - e).TotalHours, 2).ToString();
-                //            entet2.Rows[i - 1].Cells[13].Value = personnelTableAdapter1.GetDataBy19(matricule.Text).Rows[0]["NUM_CPT"].ToString();
-                //            entet2.Rows[i - 1].Cells[14].Value = Convert.ToDecimal(entet2.Rows[i - 1].Cells[12].Value) * Convert.ToDecimal(entet2.Rows[i - 1].Cells[13].Value);
-                //        }
-                //        else
-                //        {
-                //            if (entet2.Rows[i - 1].Cells[5].Value != null)
-                //            {
-                //                e = TimeSpan.Parse(entet2.Rows[i - 1].Cells[5].Value.ToString());
-
-                //                entet2.Rows[i - 1].Cells[12].Value = Math.Round((s - e).TotalHours, 2).ToString();
-                //                entet2.Rows[i - 1].Cells[13].Value = personnelTableAdapter1.GetDataBy19(matricule.Text).Rows[0]["NUM_CPT"].ToString();
-                //                entet2.Rows[i - 1].Cells[14].Value = Convert.ToDecimal(entet2.Rows[i - 1].Cells[12].Value) * Convert.ToDecimal(entet2.Rows[i - 1].Cells[13].Value);
-                //            }
-                //            else
-                //            {
-                //                entet2.Rows[i - 1].Cells[12].Value = "0";
-                //                entet2.Rows[i - 1].Cells[13].Value = personnelTableAdapter1.GetDataBy19(matricule.Text).Rows[0]["NUM_CPT"].ToString();
-                //                entet2.Rows[i - 1].Cells[14].Value = Convert.ToDecimal(entet2.Rows[i - 1].Cells[12].Value) * Convert.ToDecimal(entet2.Rows[i - 1].Cells[13].Value);
-                //            }
-
-                //        }
-                //    }
-                //    else
-                //    {
-                //        if (entet2.Rows[i - 1].Cells[5].Value != null)
-                //        {
-                //            TimeSpan s;
-                //            s = TimeSpan.Parse(entet2.Rows[i - 1].Cells[5].Value.ToString());
-
-                //            TimeSpan e;
-                //            if (entet2.Rows[i - 1].Cells[2].Value != null)
-                //            {
-                //                e = TimeSpan.Parse(entet2.Rows[i - 1].Cells[2].Value.ToString());
-                //                entet2.Rows[i - 1].Cells[12].Value = Math.Round((s - e).TotalHours, 2).ToString();
-                //                entet2.Rows[i - 1].Cells[13].Value = personnelTableAdapter1.GetDataBy19(matricule.Text).Rows[0]["NUM_CPT"].ToString();
-                //                entet2.Rows[i - 1].Cells[14].Value = Convert.ToDecimal(entet2.Rows[i - 1].Cells[12].Value) * Convert.ToDecimal(entet2.Rows[i - 1].Cells[13].Value);
-                //            }
-                //            else
-                //            {
-                //                entet2.Rows[i - 1].Cells[12].Value = "0";
-                //                entet2.Rows[i - 1].Cells[13].Value = personnelTableAdapter1.GetDataBy19(matricule.Text).Rows[0]["NUM_CPT"].ToString();
-                //                entet2.Rows[i - 1].Cells[14].Value = Convert.ToDecimal(entet2.Rows[i - 1].Cells[12].Value) * Convert.ToDecimal(entet2.Rows[i - 1].Cells[13].Value);
-                //            }
-                //        }
-                //    }
-                //}
+               
             }
         }
 
-        //    private void load_personnel_emploi_temps_data(DateTime date_jr)
-        //    {
-        //        // 1. التأكد من وجود نص في خانة الماتريكول قبل البحث
-        //        string matricule = txt_matricule.Text.Trim();
-
-        //        if (string.IsNullOrEmpty(matricule)) return;
-
-        //        // 2. تعريف الاستعلام
-        //        // استخدام BETWEEN أو المقارنة المباشرة صحيح، ولكن يفضل التأكد من تنسيق التاريخ
-        //        string query = @"SELECT matri, code, date_du, date_au 
-        //                 FROM Personnel_emploi_temps 
-        //                 WHERE matri = @matricule 
-        //                 AND @date_jr BETWEEN date_du AND date_au";
-
-        //        // 3. تجهيز البارامترات
-        //        SqlParameter[] parameters = {
-        //    new SqlParameter("@matricule", SqlDbType.Char, 5) { Value = matricule }, // تحديد النوع والطول بدقة
-        //    new SqlParameter("@date_jr", SqlDbType.Date) { Value = date_jr.Date } // إرسال التاريخ فقط بدون الوقت
-        //};
-
-        //        // 4. استخدام ExecuteSelect من الكلاس الخاص بك (يغنيك عن SqlConnection و DataAdapter)
-        //        DataTable dt = ConnectSqlServer.ExecuteSelect(query, parameters);
-
-        //        // 5. ربط النتيجة 
-        //        return dt.Rows.Count > 0 ? dt.Rows[0]["code"].ToString() : "";
-        //    }
+       
         private DataTable get_horaire_travail(string code)
         {
             string query = @"SELECT Code, Designation, SAM, DIM, LUN, MAR, MER, JEU, VEN 
@@ -573,31 +410,22 @@ namespace DevPointage
             chargement_donnee_pointage_mensuelle(matricule);
         }
 
-        private string chargement_pointage_journaliere(string matricule, DateTime date_jr, int nb_pointage,DataTable dtJ)
+        private DataTable chargement_pointage_journaliere(string matricule, DateTime date_jr, ref int nb_pointage)
         {
-            // مقارنة التاريخ بطريقة فعّالة (بدون دوال على العمود لتمكين استخدام الفهارس)
-            string query = @"SELECT 
-                        COUNT(*) OVER() AS total_count,
-                        p.MATRI, 
-                        p.DATE_POINTAGE, 
-                        p.HEURS_POINTAGE 
-                     FROM CHARGEMENT_POITEUSE AS p  
-                     WHERE p.MATRI = @matricule 
-                       AND p.DATE_POINTAGE >= @date_debut 
-                       AND p.DATE_POINTAGE < @date_fin";
+            string query = @"SELECT MATRI, DATE_POINTAGE, HEURS_POINTAGE 
+                     FROM CHARGEMENT_POITEUSE 
+                     WHERE MATRI = @matricule 
+                       AND DATE_POINTAGE = @jour
+                     ORDER BY HEURS_POINTAGE";
 
             SqlParameter[] parameters = {
         new SqlParameter("@matricule", SqlDbType.Char, 5) { Value = matricule },
-        new SqlParameter("@date_debut", SqlDbType.DateTime2) { Value = date_jr.Date },
-        new SqlParameter("@date_fin", SqlDbType.DateTime2) { Value = date_jr.Date.AddDays(1) }
+        new SqlParameter("@jour", SqlDbType.Date) { Value = date_jr.Date }
     };
 
             DataTable dt = ConnectSqlServer.ExecuteSelect(query, parameters);
-            dtJ.Merge(dt); // دمج النتائج في DataTable الممررة كوسيط
-            // إرجاع "0" عند عدم وجود سجلات (أكثر منطقية من سلسلة فارغة للعد)
-            return dt.Rows.Count > 0
-                ? dt.Rows[0]["total_count"].ToString()
-                : "0";
+            nb_pointage = dt != null ? dt.Rows.Count : 0;
+            return dt ?? new DataTable();
         }
 
         public DataSet ds;
@@ -611,7 +439,7 @@ namespace DevPointage
             ds.Tables["dts_pointage"].Clear();
 
             // يفضل التأكد من وجود أسطر قبل البدء
-            for (int i = 0; i < entet2.RowCount - 1; i++)
+            for (int i = 0; i < entet2.Rows.Count; i++)
             {
                 // دالة مساعدة لتجنب التكرار والتعامل مع القيم الفارغة
                 ds.Tables["dts_pointage"].Rows.Add(
