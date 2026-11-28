@@ -563,7 +563,7 @@
         OWBkhCm2vGIYYZ45HitswG3IRhPMBKfD1v2+0OSTEOyegIPIFfIfKxe7PtS4VtgAAAAASUVORK5CYII=
 </value>
   </data>
-  <data name="barButtonItem2.ImageOptions.LargeImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="bt_principale.ImageOptions.LargeImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAt0RVh0VGl0
         bGUASG9tZTsedGQ4AAAKMElEQVRYR52WCVRWZRrHb2Y1Z+ZMTYtKatNUGrTZOKYt5lFzK3dz0kYzK8kV
@@ -613,7 +613,7 @@
         rkJggg==
 </value>
   </data>
-  <data name="barButtonItem3.ImageOptions.LargeImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="bt_ferie.ImageOptions.LargeImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAABd0RVh0VGl0
         bGUARGF5IFZpZXc7RGF5O1ZpZXfM1LE9AAAHxElEQVRYR6WXaVRV1xXHHRKTaGKGzv3aD21X8iFr2ThT
@@ -652,7 +652,7 @@
         cJvH5M8xzp61xcUNrgSvB+54Fjxf/wsvaOB7HosTJs0ZM/8NxhH194WtdW0AAAAASUVORK5CYII=
 </value>
   </data>
-  <data name="barButtonItem4.ImageOptions.LargeImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="bt_TempsEmployee.ImageOptions.LargeImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAABZ0RVh0VGl0
         bGUAVGltZTtDbG9jaztXYXRjaG+IOKgAAArfSURBVFhHlVcHVFVXFn1pJtYkZiI6RhPHgsZCRCxYllgR
@@ -705,7 +705,7 @@
         AABJRU5ErkJggg==
 </value>
   </data>
-  <data name="barButtonItem5.ImageOptions.LargeImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="bt_gererUtilisateur.ImageOptions.LargeImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAABl0RVh0U29m
         dHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAALdEVYdFRpdGxlAFVzZXI7l1sKAgAACYlJREFUWEeV
@@ -752,7 +752,7 @@
         Mo2gQ5ClxGkN/D+QoPYNyjCHoEagDiHUZ/F/wv8lADB+B3eE88Zb5X+IAAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="barButtonItem6.ImageOptions.LargeImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="bt_impData.ImageOptions.LargeImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAC10RVh0VGl0
         bGUAREI7U291cmNlO1N0b3I7ZGF0YXNvdXJjZTtEYXRhYmFzZTtFZGl0KPa6nAAACM9JREFUWEfFlgtY
@@ -796,7 +796,7 @@
         aV3TJKNJSVsYzQ361myTOaI2lBk8Q5nfAK6UO7kYFLMOAAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="barButtonItem7.ImageOptions.LargeImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="bt_backup.ImageOptions.LargeImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAABd0RVh0VGl0
         bGUAU2F2ZSBBbGw7U2F2ZTtBbGxuFPWhAAAJv0lEQVRYR7WXaVSTZxbH20od29LFjrZ2zpkP83G+TF1R

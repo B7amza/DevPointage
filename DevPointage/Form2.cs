@@ -32,6 +32,7 @@ namespace DevPointage
         static public Form15 fn_gestion_absence;
         static public Form16 fn_gerer_pointeuse;
         static public Form17 fn_pointage_journalier;
+        static public Form23 fn_temps_employee;
         static public Form_imprission fn_imprission;
 
 
@@ -41,6 +42,7 @@ namespace DevPointage
         uc_structure uc_structure1 = new uc_structure();
         uc_fonction uc_fonction1 = new uc_fonction();
         uc_typeconge uc_typeconge1 = new uc_typeconge();
+        uc_ferier uc_ferier1 = new uc_ferier();
 
 
         private void Form2_FormClosed(object sender, FormClosedEventArgs e)
@@ -139,12 +141,19 @@ namespace DevPointage
 
         private void bt_ferie_ItemClick(object sender, ItemClickEventArgs e)
         {
-
+            LoadUC(uc_ferier1);
         }
 
         private void bt_principale_ItemClick(object sender, ItemClickEventArgs e)
         {
             LoadUC(uc_accueil1);
+        }
+
+        private void bt_TempsEmployee_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            fn_temps_employee = new Form23();
+            fn_temps_employee.ShowDialog();
+            fn_temps_employee.Dispose();
         }
     }
 }

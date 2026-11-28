@@ -1,4 +1,5 @@
-﻿using DevExpress.XtraEditors;
+﻿using DevExpress.XtraBars.Ribbon;
+using DevExpress.XtraEditors;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -595,10 +596,10 @@ namespace DevPointage
         public DataSet ds;
 
 
-        public Reports.XtraReport_PointageJR XtraReport_PointageJR1 = new Reports.XtraReport_PointageJR();
+        //public Reports.XtraReport_PointageJR XtraReport_PointageJR1 = new Reports.XtraReport_PointageJR();
         private void bt_imprimer_Click(object sender, EventArgs e)
         {
-            Form2.fn_imprission = new Form_imprission();
+            //Form2.fn_imprission = new Form_imprission();
             ds = new DataSet1();
             ds.Tables["dts_pointage"].Clear();
 
@@ -624,12 +625,19 @@ namespace DevPointage
                 );
             }
 
-            XtraReport_PointageJR1.DataSource = ds;
-            XtraReport_PointageJR1.RequestParameters = false;
+            // ✅ تقرير جديد في كل مرة
+            var report = new Reports.XtraReport_PointageJR();
+            report.DataSource = ds;
+            report.RequestParameters = false;
 
-            // تأكد من أن Form2 والتابع fn_imprission مهيآن بشكل صحيح
-            Form2.fn_imprission.documentViewer1.DocumentSource = XtraReport_PointageJR1;
-            Form2.fn_imprission.ShowDialog();
+            // ✅ نافذة طباعة جديدة أيضاً
+            using (var frm = new Form_imprission())
+            {
+                Form2.fn_imprission = frm;
+                frm.documentViewer1.DocumentSource = report;
+                report.CreateDocument();           // يفرض إعادة بناء المستند بالبيانات الحالية
+                frm.ShowDialog();
+            }
         }
 
         // دالة مساعدة لجعل الكود أنظف

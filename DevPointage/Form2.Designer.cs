@@ -178,7 +178,7 @@
             // 
             this.bt_principale.Caption = "Home";
             this.bt_principale.Id = 11;
-            this.bt_principale.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem2.ImageOptions.LargeImage")));
+            this.bt_principale.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("bt_principale.ImageOptions.LargeImage")));
             this.bt_principale.Name = "bt_principale";
             this.bt_principale.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.bt_principale_ItemClick);
             // 
@@ -186,7 +186,7 @@
             // 
             this.bt_ferie.Caption = "Jour Feriée";
             this.bt_ferie.Id = 12;
-            this.bt_ferie.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem3.ImageOptions.LargeImage")));
+            this.bt_ferie.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("bt_ferie.ImageOptions.LargeImage")));
             this.bt_ferie.Name = "bt_ferie";
             this.bt_ferie.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.bt_ferie_ItemClick);
             // 
@@ -194,28 +194,29 @@
             // 
             this.bt_TempsEmployee.Caption = "Temps Employée";
             this.bt_TempsEmployee.Id = 13;
-            this.bt_TempsEmployee.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem4.ImageOptions.LargeImage")));
+            this.bt_TempsEmployee.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("bt_TempsEmployee.ImageOptions.LargeImage")));
             this.bt_TempsEmployee.Name = "bt_TempsEmployee";
+            this.bt_TempsEmployee.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.bt_TempsEmployee_ItemClick);
             // 
             // bt_gererUtilisateur
             // 
             this.bt_gererUtilisateur.Caption = "Gerer Utilisateur";
             this.bt_gererUtilisateur.Id = 14;
-            this.bt_gererUtilisateur.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem5.ImageOptions.LargeImage")));
+            this.bt_gererUtilisateur.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("bt_gererUtilisateur.ImageOptions.LargeImage")));
             this.bt_gererUtilisateur.Name = "bt_gererUtilisateur";
             // 
             // bt_impData
             // 
             this.bt_impData.Caption = "Importer Donnée";
             this.bt_impData.Id = 15;
-            this.bt_impData.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem6.ImageOptions.LargeImage")));
+            this.bt_impData.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("bt_impData.ImageOptions.LargeImage")));
             this.bt_impData.Name = "bt_impData";
             // 
             // bt_backup
             // 
             this.bt_backup.Caption = "Backup BDD";
             this.bt_backup.Id = 16;
-            this.bt_backup.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem7.ImageOptions.LargeImage")));
+            this.bt_backup.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("bt_backup.ImageOptions.LargeImage")));
             this.bt_backup.Name = "bt_backup";
             // 
             // ribbonPage1

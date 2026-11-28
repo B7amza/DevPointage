@@ -1,4 +1,5 @@
-﻿using DevExpress.XtraEditors;
+﻿using DevExpress.XtraBars.Ribbon;
+using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Filtering.Templates;
 using DevExpress.XtraGrid;
 using System;
@@ -52,7 +53,7 @@ namespace DevPointage
             {
                 lb_nom_prenom.Text = "";
                 lb_nom_prenom.Visible = false;
-                MessageBox.Show("المستخدم غير موجود", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                XtraMessageBox.Show("المستخدم غير موجود", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
             }
         }
@@ -85,12 +86,12 @@ namespace DevPointage
             // 1. التحقق من اختيار الشهر والسنة
             if (liste_mois.SelectedIndex == -1)
             {
-                MessageBox.Show("الرجاء اختيار الشهر.", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                XtraMessageBox.Show("الرجاء اختيار الشهر.", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (string.IsNullOrWhiteSpace(txt_annee.Text))
             {
-                MessageBox.Show("الرجاء إدخال السنة.", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                XtraMessageBox.Show("الرجاء إدخال السنة.", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -193,8 +194,8 @@ namespace DevPointage
 
             Boolean existe = false;
 
-            int nbr_jour = DateTime.DaysInMonth(Convert.ToInt32(txt_annee.Text.Trim()), liste_mois.SelectedIndex + 1);
-
+            //int nbr_jour = DateTime.DaysInMonth(Convert.ToInt32(txt_annee.Text.Trim()), liste_mois.SelectedIndex + 1);
+            int nbr_jour = DateTime.DaysInMonth(annee, mois);
             //charger les jours de mois
             for (int i = 1; i <= nbr_jour; i++)
             {
@@ -348,19 +349,26 @@ namespace DevPointage
                 ///
                 /// 
                 DataTable dtABS = new DataTable();
-                string c_conge,lib_conge;
-
                 LoadAbsences(matri, d_jour, dtABS);
 
-                    if (dtABS.Rows.Count > 0)
-                    {
-                        c_conge = dtABS.Rows[0]["c_conge"].ToString();
-                        lib_conge = dtABS.Rows[0]["lib"].ToString();
-                        entet2.Rows[i - 1].Cells[10].Value = lib_conge;
-                    }
+                // عدة غيابات في اليوم نفسه تُجمع في خانة Observation مفصولة بـ " | "
+                string obsJour = "";
+                foreach (DataRow ar in dtABS.Rows)
+                {
+                    string lib = ar["lib"]?.ToString()?.Trim();
+                    if (string.IsNullOrEmpty(lib)) continue;
+
+                    string obs = ar["OBS"]?.ToString()?.Trim();
+                    string texte = string.IsNullOrEmpty(obs) ? lib : lib + " " + obs;
+
+                    obsJour = obsJour.Length == 0 ? texte : obsJour + " | " + texte;
+                }
+
+                if (obsJour.Length > 0)
+                    entet2.Rows[i - 1].Cells[10].Value = obsJour;
 
                 ///*********************************************************************************************************/
-               
+
             }
         }
 
@@ -401,7 +409,7 @@ namespace DevPointage
             string matricule = txt_matricule.Text.Trim();
             if (string.IsNullOrEmpty(matricule))
             {
-                MessageBox.Show("الرجاء إدخال الرقم الوظيفي (الماتريكول).", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                XtraMessageBox.Show("الرجاء إدخال الرقم الوظيفي (الماتريكول).", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txt_matricule.Focus();
                 return;
             }
@@ -431,10 +439,10 @@ namespace DevPointage
         public DataSet ds;
         
         
-        public Reports.XtraReport_PointageM XtraReport_PointageM1 = new Reports.XtraReport_PointageM();
+        //public Reports.XtraReport_PointageM XtraReport_PointageM1 = new Reports.XtraReport_PointageM();
         private void bt_imprimer_Click(object sender, EventArgs e)
         {
-            Form2.fn_imprission = new Form_imprission();
+           // Form2.fn_imprission = new Form_imprission();
             ds = new DataSet1();
             ds.Tables["dts_pointage"].Clear();
 
@@ -460,12 +468,20 @@ namespace DevPointage
                 );
             }
 
-            XtraReport_PointageM1.DataSource = ds;
-            XtraReport_PointageM1.RequestParameters = false;
+            // ✅ تقرير جديد في كل مرة
+            var report = new Reports.XtraReport_PointageM();
+            report.DataSource = ds;
+            report.RequestParameters = false;
+            //report.DernierTelechargement = lb_max_date_telechargement.Text;
 
-            // تأكد من أن Form2 والتابع fn_imprission مهيآن بشكل صحيح
-            Form2.fn_imprission.documentViewer1.DocumentSource = XtraReport_PointageM1;
-            Form2.fn_imprission.ShowDialog();
+            // ✅ نافذة طباعة جديدة أيضًا
+            using (var frm = new Form_imprission())
+            {
+                Form2.fn_imprission = frm;   // إذا كان مستعملاً في أماكن أخرى
+                frm.documentViewer1.DocumentSource = report;
+                report.CreateDocument();           // يفرض إعادة بناء المستند بالبيانات الحالية
+                frm.ShowDialog();
+            }
         }
 
         // دالة مساعدة لجعل الكود أنظف
@@ -476,41 +492,34 @@ namespace DevPointage
             return value != null ? value.ToString() : ".";
         }
 
-        private string LoadAbsences(string matricule, DateTime date_jr,DataTable dtABS)
+        private void LoadAbsences(string matricule, DateTime date_jr, DataTable dtABS)
         {
             try
             {
-                if (string.IsNullOrEmpty(matricule)) return "";
+                if (string.IsNullOrEmpty(matricule)) return;
 
-                // الاستعلام لجلب كود الإجازة بناءً على الموظف والتاريخ
-                string query = @"SELECT  COUNT(*) AS count, A.C_CONGE, T.LIB
-                                    FROM [ABS] A
-                                    INNER JOIN [type_conge] T ON A.C_CONGE = T.CODE
-                                    WHERE A.DATE1 = @date_jr 
-                                      AND A.MATRI = @matricule
-                                    GROUP BY A.C_CONGE, T.LIB";
+                string query = @"SELECT A.C_CONGE, ISNULL(T.LIB, A.C_CONGE) AS LIB, A.OBS
+                         FROM [ABS] A
+                         LEFT JOIN [TYPE_CONGE] T ON A.C_CONGE = T.CODE
+                         WHERE A.MATRI = @matricule
+                           AND A.DATE1 <= @date_jr
+                           AND ISNULL(A.DATE2, A.DATE1) >= @date_jr
+                         ORDER BY A.H_DEBUT, A.NUM_BON";
 
                 SqlParameter[] parameters = {
-            new SqlParameter("@date_jr", SqlDbType.Date) { Value = date_jr.Date }, // نستخدم .Date لضمان مقارنة التاريخ فقط بدون الوقت
-            new SqlParameter("@matricule", SqlDbType.VarChar) { Value = matricule }
+            new SqlParameter("@date_jr", SqlDbType.Date) { Value = date_jr.Date },
+            new SqlParameter("@matricule", SqlDbType.VarChar, 5) { Value = matricule }
         };
 
                 DataTable dt = ConnectSqlServer.ExecuteSelect(query, parameters);
-                dtABS.Merge(dt); // دمج النتائج في DataTable الممررة كوسيط
 
-                // التحقق مما إذا كان هناك نتائج وإرجاع القيمة
                 if (dt != null && dt.Rows.Count > 0)
-                {
-                    return dt.Rows[0]["C_CONGE"].ToString();
-                }
-
-                return ""; // إرجاع نص فارغ في حال عدم وجود بيانات
+                    dtABS.Merge(dt);
             }
             catch (Exception ex)
             {
-                // في حال حدوث خطأ، نعرض الرسالة ونرجع نص فارغ لضمان عمل البرنامج
-                MessageBox.Show("Erreur lors du chargement : " + ex.Message);
-                return "";
+                XtraMessageBox.Show("Erreur lors du chargement : " + ex.Message, "Erreur",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
